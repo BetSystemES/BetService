@@ -1,5 +1,7 @@
-﻿using BetService.BusinessLogic.Contracts.Providers;
+﻿using System.Security;
+using BetService.BusinessLogic.Contracts.Providers;
 using BetService.BusinessLogic.Contracts.Services;
+using BetService.Grpc.Infrastructure.Mappings;
 using BusinessLogic = BetService.BusinessLogic;
 
 namespace BetService.Grpc.Infrastructure.Configurations
@@ -14,6 +16,8 @@ namespace BetService.Grpc.Infrastructure.Configurations
         /// <returns> IServiceCollection </returns>
         public static IServiceCollection AddInfrastructureServices(this IServiceCollection services)
         {
+            services.AddAutoMapper(typeof(BetServiceProfile).Assembly);
+
             return services;
         }
 
