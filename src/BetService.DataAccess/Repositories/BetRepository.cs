@@ -34,6 +34,7 @@ namespace BetService.DataAccess.Repositories
         public override Task Add(Bet entity, CancellationToken token)
         {
             entity.CreateAtUtc = _dateTimeProvider.NowUtc;
+
             return base.Add(entity, token);
         }
 

@@ -20,14 +20,14 @@ service BetService {
 }
 
 message CreateBetRequset {
-  Bet bet = 1;
+  BetCreateModel bet_create_model = 1;
 }
 
 message CreateBetResponse {
 }
 
 message CreateBetRangeRequest {
-  repeated Bet bets = 1;
+  repeated BetCreateModel bet_create_models = 1;
 }
 
 message CreateBetRangeResponse {
@@ -79,6 +79,16 @@ message Bet {
   string coefficient_id = 3;
   double amount = 4;
   double rate = 5;
+  BetStatusType status_type = 6;
+  BetPaidType paid_type = 7;
+  .google.protobuf.Timestamp create_at_utc = 8; 
+}
+
+message BetCreateModel {
+  string user_id = 1;
+  string coefficient_id = 2;
+  double amount = 3;
+  double rate = 4;
 }
 
 message BetStatusUpdateModel {

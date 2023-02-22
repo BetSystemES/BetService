@@ -25,7 +25,7 @@ namespace BetService.Grpc.Services
         {
             var token = context.CancellationToken;
 
-            var bet = _mapper.Map<BusinessModels.Bet>(request.Bet);
+            var bet = _mapper.Map<BusinessModels.Bet>(request.BetCreateModel);
 
             await _betService.Create(bet, token);
 
@@ -38,7 +38,7 @@ namespace BetService.Grpc.Services
         {
             var token = context.CancellationToken;
 
-            var bets = _mapper.Map<List<BusinessModels.Bet>>(request.Bets);
+            var bets = _mapper.Map<List<BusinessModels.Bet>>(request.BetCreateModels);
 
             await _betService.CreateRange(bets, token);
 

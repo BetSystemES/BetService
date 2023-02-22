@@ -25,6 +25,7 @@ namespace BetService.Grpc.Infrastructure.Mappings
                 .ReverseMap();
             CreateMap<BusinessModels.BetStatusUpdateModel, BetStatusUpdateModel>()
                 .ReverseMap();
+            CreateMap<BetCreateModel, BusinessModels.Bet>();
 
             CreateMap<BusinessEnums.BetPaidType, BetPaidType>()
                 .ReverseMap();
