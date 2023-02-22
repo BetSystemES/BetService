@@ -51,7 +51,7 @@ message GetUsersBetsResponse {
 }
 
 message GetUserBetByIdRequset {
-  string id = 1;
+  string user_id = 1;
 }
 
 message GetUserBetByIdResponse {

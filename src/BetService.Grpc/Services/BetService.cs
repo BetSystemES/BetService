@@ -47,19 +47,51 @@ namespace BetService.Grpc.Services
             return response;
         }
 
-        public override Task<GetUserBetByIdResponse> GetUserBetById(GetUserBetByIdRequset request, ServerCallContext context)
+        public override async Task<GetUserBetByIdResponse> GetUserBetById(GetUserBetByIdRequset request, ServerCallContext context)
         {
-            return base.GetUserBetById(request, context);
+            var token = context.CancellationToken;
+
+            var id = _mapper.Map<Guid>(request.UserId);
+
+            var bet = await _betService.GetById(id, token);
+
+            var grpcBet = _mapper.Map<Bet>(bet);
+
+            var response = new GetUserBetByIdResponse()
+            {
+                Bet = grpcBet
+            };
+
+            return response;
         }
 
-        public override Task<GetUsersBetsResponse> GetUsersBets(GetUsersBetsRequset request, ServerCallContext context)
+        public override async Task<GetUsersBetsResponse> GetUsersBets(GetUsersBetsRequset request, ServerCallContext context)
         {
-            return base.GetUsersBets(request, context);
+            var token = context.CancellationToken;
+
+            var id = _mapper.Map<Guid>(request.UserId);
+
+            var bets = await _betService.GetRangeByUserId(id, request.Page, request.PageSize, token);
+
+            var grpcBets = _mapper.Map<IEnumerable<Bet>>(bets);
+
+            var response = new GetUsersBetsResponse();
+            response.Bets.AddRange(grpcBets);
+
+            return response;
         }
 
-        public override Task<UpdateBetStatusesResponse> UpdateBetStatuses(UpdateBetStatusesRequest request, ServerCallContext context)
+        public override async Task<UpdateBetStatusesResponse> UpdateBetStatuses(UpdateBetStatusesRequest request, ServerCallContext context)
         {
-            return base.UpdateBetStatuses(request, context);
+            var token = context.CancellationToken;
+
+            var betStatusUpdateModels = _mapper.Map<List<BusinessModels.BetStatusUpdateModel>>(request.BetStatusUpdateModels);
+
+            await _betService.UpdateStatuses(betStatusUpdateModels, token);
+
+            var response = new UpdateBetStatusesResponse();
+
+            return response;
         }
     }
 }
