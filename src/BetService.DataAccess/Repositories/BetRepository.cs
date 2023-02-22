@@ -13,20 +13,38 @@ namespace BetService.DataAccess.Repositories
     {
         private readonly IDateTimeProvider _dateTimeProvider;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BetRepository"/> class.
+        /// </summary>
+        /// <param name="provider">The provider.</param>
+        /// <param name="dateTimeProvider">The date time provider.</param>
         public BetRepository(DbSet<Bet> provider, IDateTimeProvider dateTimeProvider) : base(provider, true)
         {
             _dateTimeProvider = dateTimeProvider;
         }
 
+        /// <summary>
+        /// Adds the specified entity.
+        /// </summary>
+        /// <param name="entity">The entity.</param>
+        /// <param name="token">The token.</param>
+        /// <returns>Task</returns>
         public override Task Add(Bet entity, CancellationToken token)
         {
             entity.CreateAtUtc = _dateTimeProvider.NowUtc;
             return base.Add(entity, token);
         }
 
+        /// <summary>
+        /// Adds the range.
+        /// </summary>
+        /// <param name="entities">The entities.</param>
+        /// <param name="token">The token.</param>
+        /// <returns>Task</returns>
         public override Task AddRange(IEnumerable<Bet> entities, CancellationToken token)
         {
-            entities.ToList().ForEach(x => x.CreateAtUtc = _dateTimeProvider.NowUtc);
+            var now = _dateTimeProvider.NowUtc;
+            entities.ToList().ForEach(x => x.CreateAtUtc = now);
 
             return base.AddRange(entities, token);
         }
