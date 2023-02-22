@@ -6,12 +6,22 @@ using BusinessModels = BetService.BusinessLogic.Models;
 
 namespace BetService.Grpc.Services
 {
+    /// <summary>
+    /// Implementation of bet grpc service.
+    /// </summary>
+    /// <seealso cref="BetService.Grpc.BetService.BetServiceBase" />
     public class BetService : Grpc.BetService.BetServiceBase
     {
         private readonly ILogger<BetService> _logger;
         private readonly IBetService _betService;
         private readonly IMapper _mapper;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="BetService"/> class.
+        /// </summary>
+        /// <param name="logger">The logger.</param>
+        /// <param name="betService">The bet service.</param>
+        /// <param name="mapper">The mapper.</param>
         public BetService(ILogger<BetService> logger,
             IBetService betService,
             IMapper mapper)
@@ -21,6 +31,12 @@ namespace BetService.Grpc.Services
             _mapper = mapper;
         }
 
+        /// <summary>
+        /// Creates the bet.
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <param name="context">The context.</param>
+        /// <returns> <seealso cref="CreateBetResponse"/></returns>
         public override async Task<CreateBetResponse> CreateBet(CreateBetRequset request, ServerCallContext context)
         {
             var token = context.CancellationToken;
@@ -34,6 +50,12 @@ namespace BetService.Grpc.Services
             return response;
         }
 
+        /// <summary>
+        /// Creates the bet range.
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <param name="context">The context.</param>
+        /// <returns><seealso cref="CreateBetRangeResponse"/></returns>
         public override async Task<CreateBetRangeResponse> CreateBetRange(CreateBetRangeRequest request, ServerCallContext context)
         {
             var token = context.CancellationToken;
@@ -47,6 +69,12 @@ namespace BetService.Grpc.Services
             return response;
         }
 
+        /// <summary>
+        /// Gets the user bet by identifier.
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <param name="context">The context.</param>
+        /// <returns><seealso cref="GetUserBetByIdResponse"/></returns>
         public override async Task<GetUserBetByIdResponse> GetUserBetById(GetUserBetByIdRequset request, ServerCallContext context)
         {
             var token = context.CancellationToken;
@@ -65,6 +93,12 @@ namespace BetService.Grpc.Services
             return response;
         }
 
+        /// <summary>
+        /// Gets the users bets.
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <param name="context">The context.</param>
+        /// <returns><seealso cref="GetUsersBetsResponse"/></returns>
         public override async Task<GetUsersBetsResponse> GetUsersBets(GetUsersBetsRequset request, ServerCallContext context)
         {
             var token = context.CancellationToken;
@@ -81,6 +115,12 @@ namespace BetService.Grpc.Services
             return response;
         }
 
+        /// <summary>
+        /// Updates the bet statuses.
+        /// </summary>
+        /// <param name="request">The request.</param>
+        /// <param name="context">The context.</param>
+        /// <returns><seealso cref="UpdateBetStatusesResponse"/></returns>
         public override async Task<UpdateBetStatusesResponse> UpdateBetStatuses(UpdateBetStatusesRequest request, ServerCallContext context)
         {
             var token = context.CancellationToken;
