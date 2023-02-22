@@ -15,6 +15,6 @@ namespace BetService.BusinessLogic.Models
         /// <summary>
         /// Bet status type.
         /// </summary>
-        public BetStatusType BetStatusType { get; set; }
+        public BetStatusType StatusType { get; set; }
     }
 }

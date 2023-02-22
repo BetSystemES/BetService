@@ -68,7 +68,7 @@ namespace BetService.BusinessLogic.Services
             {
                 await _betRepository.UpdateBetStatusByCoefficientId(
                     betStatusUpdateModel.CoefficientId,
-                    betStatusUpdateModel.BetStatusType,
+                    betStatusUpdateModel.StatusType,
                     cancellationToken);
             }
 

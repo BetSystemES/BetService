@@ -51,7 +51,7 @@ namespace BetService.Grpc.Services
         {
             var token = context.CancellationToken;
 
-            var id = _mapper.Map<Guid>(request.UserId);
+            var id = _mapper.Map<Guid>(request.Id);
 
             var bet = await _betService.GetById(id, token);
 

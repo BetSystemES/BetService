@@ -51,7 +51,7 @@ message GetUsersBetsResponse {
 }
 
 message GetUserBetByIdRequset {
-  string user_id = 1;
+  string id = 1;
 }
 
 message GetUserBetByIdResponse {
@@ -79,9 +79,6 @@ message Bet {
   string coefficient_id = 3;
   double amount = 4;
   double rate = 5;
-  BetStatusType status_type = 6;
-  BetPaidType paid_type = 7;
-  .google.protobuf.Timestamp create_at_utc = 8; 
 }
 
 message BetStatusUpdateModel {
