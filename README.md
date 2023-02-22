@@ -31,6 +31,7 @@ Example of bet entity:
 
 <h2>Requests examples</h2>
 CreateBetRequset:
+
 ```
 {
 	"bet_create_model" : {
@@ -43,6 +44,7 @@ CreateBetRequset:
 ```
 
 CreateBetRangeRequest:
+
 ```
 {
 	"bet_create_models" : [
@@ -69,6 +71,7 @@ CreateBetRangeRequest:
 ```
 
 GetUserBetByIdRequset:
+
 ```
 {
 	"id" : "999d37d5-a15d-4469-9373-aaa4119b8c59"
@@ -76,6 +79,7 @@ GetUserBetByIdRequset:
 ```
 
 GetUsersBetsRequset:
+
 ```
 {
 	"user_id" : "9a1e7016-77d3-47ab-84c2-0b3a1313b9b6",
@@ -85,6 +89,7 @@ GetUsersBetsRequset:
 ```
 
 UpdateBetStatusesRequest:
+
 ```
 {
 	"bet_status_update_models" : [
