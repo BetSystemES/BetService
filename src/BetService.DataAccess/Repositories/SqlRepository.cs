@@ -32,6 +32,7 @@ namespace BetService.DataAccess.Repositories
         public virtual async Task Add(TEntity entity, CancellationToken token)
         {
             ArgumentNullException.ThrowIfNull(entity, "entity");
+
             if (_useHiLoGenerators)
             {
                 await _entities.AddAsync(entity, token);

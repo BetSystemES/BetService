@@ -1,6 +1,6 @@
-﻿using System.Runtime.CompilerServices;
-using BetService.BusinessLogic.Contracts.DataAccess.Repositories;
+﻿using BetService.BusinessLogic.Contracts.DataAccess.Repositories;
 using BetService.BusinessLogic.Contracts.Providers;
+using BetService.BusinessLogic.Enums;
 using BetService.BusinessLogic.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,6 +11,7 @@ namespace BetService.DataAccess.Repositories
     /// </summary>
     public class BetRepository : SqlRepository<Bet>, IBetRepository
     {
+        private readonly DbSet<Bet> _entities;
         private readonly IDateTimeProvider _dateTimeProvider;
 
         /// <summary>
@@ -20,6 +21,7 @@ namespace BetService.DataAccess.Repositories
         /// <param name="dateTimeProvider">The date time provider.</param>
         public BetRepository(DbSet<Bet> provider, IDateTimeProvider dateTimeProvider) : base(provider, true)
         {
+            _entities = provider;
             _dateTimeProvider = dateTimeProvider;
         }
 
@@ -47,6 +49,24 @@ namespace BetService.DataAccess.Repositories
             entities.ToList().ForEach(x => x.CreateAtUtc = now);
 
             return base.AddRange(entities, token);
+        }
+
+        /// <summary>
+        /// Update bet status by coefficient identifier.
+        /// </summary>
+        /// <param name="coefficientId"></param>
+        /// <param name="betStatusType"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns>Task</returns>
+        public async Task UpdateBetStatusByCoefficientId(Guid coefficientId, BetStatusType betStatusType, CancellationToken cancellationToken)
+        {
+            var bet = await _entities.FirstOrDefaultAsync(x => x.CoefficientId.Equals(coefficientId), cancellationToken);
+
+            ArgumentNullException.ThrowIfNull(bet, nameof(bet));
+
+            bet.BetStatusType= betStatusType;
+
+            _entities.Update(bet);
         }
     }
 }
