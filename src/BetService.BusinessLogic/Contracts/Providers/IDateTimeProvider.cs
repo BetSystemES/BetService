@@ -5,20 +5,12 @@
     /// </summary>
     public interface IDateTimeProvider
     {
-        /// <summary>
-        /// Gets the now.
-        /// </summary>
-        /// <value>
-        /// The now DateTime.
-        /// </value>
+        /// <summary>Gets the now.</summary>
+        /// <value>The now DateTime.</value>
         DateTime Now { get; }
 
-        /// <summary>
-        /// Gets the now UTC.
-        /// </summary>
-        /// <value>
-        /// The now UTC DateTime.
-        /// </value>
+        /// <summary>Gets the now UTC.</summary>
+        /// <value>The now UTC DateTime.</value>
         DateTime NowUtc { get; }
     }
 }

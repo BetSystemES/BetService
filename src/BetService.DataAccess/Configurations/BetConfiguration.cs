@@ -9,6 +9,10 @@ namespace BetService.DataAccess.Configurations
     /// </summary>
     public class BetConfiguration : IEntityTypeConfiguration<Bet>
     {
+        /// <summary>
+        /// Configures the entity of type <typeparamref name="TEntity" />.
+        /// </summary>
+        /// <param name="builder">The builder to be used to configure the entity type.</param>
         public void Configure(EntityTypeBuilder<Bet> builder)
         {
             builder.HasKey(x => x.Id);
