@@ -62,9 +62,18 @@ namespace BetService.BusinessLogic.Services
         }
 
         /// <inheritdoc />
-        public Task UpdateStatuses(List<BetStatusUpdateModel> betStatusUpdateModels, CancellationToken cancellationToken)
+        public async Task UpdateStatuses(List<BetStatusUpdateModel> betStatusUpdateModels, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            foreach (var betStatusUpdateModel in betStatusUpdateModels)
+            {
+                await _betRepository.UpdateBetStatusByCoefficientId(
+                    betStatusUpdateModel.CoefficientId,
+                    betStatusUpdateModel.BetStatusType,
+                    cancellationToken);
+            }
+
+            // todo: process for payout logic
+            await _dataContext.SaveChanges(cancellationToken);
         }
     }
 }
