@@ -3,6 +3,7 @@ using BetService.BusinessLogic.Models;
 
 namespace BetService.BusinessLogic.Contracts.DataAccess.Repositories
 {
+    // TODO: change file location to BetService.DataAccess.Contracts.Repositories
     /// <summary>
     /// Bet repository contract.
     /// </summary>

@@ -2,6 +2,7 @@
 
 namespace BetService.BusinessLogic.Models
 {
+    // TODO: Change file location to BetService.DataAccess.Entities
     /// <summary>
     /// Bet business model representation.
     /// </summary>
@@ -37,6 +38,7 @@ namespace BetService.BusinessLogic.Models
         /// </summary>
         public DateTime CreateAtUtc { get; set; }
 
+        // TODO: typo in betPaidType. Should be BetPaidType
         /// <summary>
         /// Bet paid type.
         /// </summary>

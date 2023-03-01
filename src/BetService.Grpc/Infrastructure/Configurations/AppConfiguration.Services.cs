@@ -1,4 +1,5 @@
-﻿using System.Security;
+﻿// TODO: remove unused/sort usings
+using System.Security;
 using BetService.BusinessLogic.Contracts.Providers;
 using BetService.BusinessLogic.Contracts.Services;
 using BetService.Grpc.Infrastructure.Mappings;
@@ -6,6 +7,7 @@ using BusinessLogic = BetService.BusinessLogic;
 
 namespace BetService.Grpc.Infrastructure.Configurations
 {
+    // TODO: Remove partial or rename AppConfiguration to AppConfigurations
     /// <summary>
     /// App configuration
     /// </summary>

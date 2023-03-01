@@ -47,6 +47,7 @@ namespace BetService.DataAccess.Repositories
         public override Task AddRange(IEnumerable<Bet> entities, CancellationToken token)
         {
             var now = _dateTimeProvider.NowUtc;
+            // TODO: possible multiple enumerator for entities
             entities.ToList().ForEach(x => x.CreateAtUtc = now);
 
             return base.AddRange(entities, token);

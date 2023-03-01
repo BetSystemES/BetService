@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace BetService.DataAccess
 {
+    // TODO: change file location to BetService.DataAccess.Extensions
     /// <summary>
     /// Data access services extenions for dependency injection.
     /// </summary>

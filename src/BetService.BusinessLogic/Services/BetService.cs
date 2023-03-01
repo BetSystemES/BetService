@@ -72,7 +72,7 @@ namespace BetService.BusinessLogic.Services
                     cancellationToken);
             }
 
-            // todo: process for payout logic
+            // TODO: process for payout logic
             await _dataContext.SaveChanges(cancellationToken);
         }
     }

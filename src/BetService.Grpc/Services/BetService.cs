@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
 using BetService.BusinessLogic.Contracts.Services;
 using Grpc.Core;
-
+// TODO: remove all empty lines
 using BusinessModels = BetService.BusinessLogic.Models;
 
 namespace BetService.Grpc.Services
@@ -12,6 +12,7 @@ namespace BetService.Grpc.Services
     /// <seealso cref="BetService.Grpc.BetService.BetServiceBase" />
     public class BetService : Grpc.BetService.BetServiceBase
     {
+        // TODO: logger was not used in the service. Use it or remove.
         private readonly ILogger<BetService> _logger;
         private readonly IBetService _betService;
         private readonly IMapper _mapper;
