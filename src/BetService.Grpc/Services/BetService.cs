@@ -1,5 +1,8 @@
 ﻿using AutoMapper;
 using BetService.BusinessLogic.Contracts.Services;
+using BetService.BusinessLogic.Extensions;
+using BetService.BusinessLogic.Models;
+using BetService.Grpc.Infrastructure.Clients.CashService;
 using Grpc.Core;
 
 using BusinessModels = BetService.BusinessLogic.Models;
@@ -14,6 +17,7 @@ namespace BetService.Grpc.Services
     {
         private readonly ILogger<BetService> _logger;
         private readonly IBetService _betService;
+        private readonly ICashService _cashService;
         private readonly IMapper _mapper;
 
         /// <summary>
@@ -24,10 +28,12 @@ namespace BetService.Grpc.Services
         /// <param name="mapper">The mapper.</param>
         public BetService(ILogger<BetService> logger,
             IBetService betService,
+            ICashService cashService,
             IMapper mapper)
         {
             _logger = logger;
             _betService = betService;
+            _cashService = cashService;
             _mapper = mapper;
         }
 
@@ -125,9 +131,14 @@ namespace BetService.Grpc.Services
         {
             var token = context.CancellationToken;
 
-            var betStatusUpdateModels = _mapper.Map<List<BusinessModels.BetStatusUpdateModel>>(request.BetStatusUpdateModels);
+            var betStatusUpdateModels = _mapper.Map<IEnumerable<BusinessModels.BetStatusUpdateModel>>(request.BetStatusUpdateModels);
 
             await _betService.UpdateStatuses(betStatusUpdateModels, token);
+
+            var positivebetStatusUpdateModels = betStatusUpdateModels.ToPositiveBets();
+            var positiveBets = await _betService.GetRangeByCoefficientIds(positivebetStatusUpdateModels.Select(x => x.CoefficientId), token);
+            await _cashService.DepositRange(positiveBets, token);
+            _logger.LogTrace("Payments were successfully compleated for bets, Counts={bets.Count} ", positiveBets.Count());
 
             var response = new UpdateBetStatusesResponse();
 

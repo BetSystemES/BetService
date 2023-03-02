@@ -30,8 +30,8 @@ namespace BetService.BusinessLogic.Contracts.Services
         /// </summary>
         /// <param name="betStatusUpdateModels">The bet status update models.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>Task</returns>
-        Task UpdateStatuses(List<BetStatusUpdateModel> betStatusUpdateModels, CancellationToken cancellationToken);
+        /// <returns> Task </returns>
+        Task UpdateStatuses(IEnumerable<BetStatusUpdateModel> betStatusUpdateModels, CancellationToken cancellationToken);
 
         /// <summary>
         /// Creates the specified bet.
@@ -48,5 +48,21 @@ namespace BetService.BusinessLogic.Contracts.Services
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>Task</returns>
         Task CreateRange(List<Bet> bets, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Gets the range by coefficient identifier.
+        /// </summary>
+        /// <param name="coefficientId">The coefficient identifier.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>The list of <seealso cref="Bet"/>s with specific coefficientId.</returns>
+        Task<IEnumerable<Bet>> GetRangeByCoefficientId(Guid coefficientId, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Gets the range by coefficient identifiers.
+        /// </summary>
+        /// <param name="coefficientIds">The coefficient identifiers.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>The list of <seealso cref="Bet"/>s with specific coefficientId.</returns>
+        Task<IEnumerable<Bet>> GetRangeByCoefficientIds(IEnumerable<Guid> coefficientIds, CancellationToken cancellationToken);
     }
 }

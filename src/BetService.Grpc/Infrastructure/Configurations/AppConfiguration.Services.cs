@@ -1,8 +1,8 @@
-﻿using System.Security;
-using BetService.BusinessLogic.Contracts.Providers;
+﻿using BetService.BusinessLogic.Contracts.Providers;
 using BetService.BusinessLogic.Contracts.Services;
+using BetService.Grpc.Infrastructure.Clients.CashService;
 using BetService.Grpc.Infrastructure.Mappings;
-using BusinessLogic = BetService.BusinessLogic;
+using ClientsWarapper = BetService.Grpc.Infrastructure.Clients;
 
 namespace BetService.Grpc.Infrastructure.Configurations
 {
@@ -28,6 +28,18 @@ namespace BetService.Grpc.Infrastructure.Configurations
         {
             services.AddScoped<IBetService, BusinessLogic.Services.BetService>()
                 .AddScoped<IDateTimeProvider, BusinessLogic.DateTimeProvider>();
+
+            return services;
+        }
+
+        /// <summary>
+        /// Add grpc services wrappers.
+        /// </summary>
+        /// <param name="services"></param>
+        /// <returns> IServiceCollection </returns>
+        public static IServiceCollection AddGrpcClientsServicesWrappers(this IServiceCollection services)
+        {
+            services.AddScoped<ICashService, ClientsWarapper.CashService.CashService>();
 
             return services;
         }

@@ -46,23 +46,33 @@ namespace BetService.BusinessLogic.Services
         }
 
         /// <inheritdoc />
-        public async Task<Bet?> GetById(Guid id, CancellationToken cancellationToken)
+        public Task<Bet?> GetById(Guid id, CancellationToken cancellationToken)
         {
-            var item = await _betProvider.GetBetById(id, cancellationToken);
-
-            return item;
+            return _betProvider.GetBetById(id, cancellationToken);
         }
 
-        /// <inheritdoc />
-        public async Task<List<Bet>> GetRangeByUserId(Guid userId, int page, int pageSize, CancellationToken cancellationToken)
+        /// <inheritdoc/>
+        public Task<IEnumerable<Bet>> GetRangeByCoefficientId(Guid coefficientId, CancellationToken cancellationToken)
         {
-            var items = await _betProvider.GetBetsRangeByUserId(userId, page, pageSize, cancellationToken);
+            var items = _betProvider.GetRangeByCoefficientId(coefficientId, cancellationToken);
 
             return items;
         }
 
+        /// <inheritdoc/>
+        public Task<IEnumerable<Bet>> GetRangeByCoefficientIds(IEnumerable<Guid> coefficientIds, CancellationToken cancellationToken)
+        {
+            return _betProvider.GetRangeByCoefficientIds(coefficientIds, cancellationToken);
+        }
+
         /// <inheritdoc />
-        public async Task UpdateStatuses(List<BetStatusUpdateModel> betStatusUpdateModels, CancellationToken cancellationToken)
+        public Task<List<Bet>> GetRangeByUserId(Guid userId, int page, int pageSize, CancellationToken cancellationToken)
+        {
+            return _betProvider.GetBetsRangeByUserId(userId, page, pageSize, cancellationToken);
+        }
+
+        /// <inheritdoc />
+        public async Task UpdateStatuses(IEnumerable<BetStatusUpdateModel> betStatusUpdateModels, CancellationToken cancellationToken)
         {
             foreach (var betStatusUpdateModel in betStatusUpdateModels)
             {
@@ -71,8 +81,6 @@ namespace BetService.BusinessLogic.Services
                     betStatusUpdateModel.StatusType,
                     cancellationToken);
             }
-
-            // todo: process for payout logic
             await _dataContext.SaveChanges(cancellationToken);
         }
     }

@@ -1,4 +1,5 @@
-﻿using BetService.BusinessLogic.Models;
+﻿using System.Collections.Generic;
+using BetService.BusinessLogic.Models;
 
 namespace BetService.BusinessLogic.Contracts.DataAccess.Providers
 {
@@ -24,5 +25,21 @@ namespace BetService.BusinessLogic.Contracts.DataAccess.Providers
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The list of bets.</returns>
         Task<List<Bet>> GetBetsRangeByUserId(Guid userId, int page, int pageSize, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Gets the range by coefficient identifier.
+        /// </summary>
+        /// <param name="coefficientId">The coefficient identifier.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>The list of <seealso cref="Bet"/>s with specific coefficientId.</returns>
+        Task<IEnumerable<Bet>> GetRangeByCoefficientId(Guid coefficientId, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Gets the range by coefficient identifiers.
+        /// </summary>
+        /// <param name="coefficientIds">The coefficient identifiers.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>The list of <seealso cref="Bet"/>s with specific coefficientId.</returns>
+        Task<IEnumerable<Bet>> GetRangeByCoefficientIds(IEnumerable<Guid> coefficientIds, CancellationToken cancellationToken);
     }
 }
