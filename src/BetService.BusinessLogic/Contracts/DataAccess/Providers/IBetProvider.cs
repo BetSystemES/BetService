@@ -2,7 +2,6 @@
 
 namespace BetService.BusinessLogic.Contracts.DataAccess.Providers
 {
-    // TODO: change file location to BetService.DataAccess.Contracts.Providers
     /// <summary>
     /// Bet provider contract.
     /// </summary>

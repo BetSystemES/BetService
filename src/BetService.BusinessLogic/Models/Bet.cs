@@ -2,7 +2,7 @@
 
 namespace BetService.BusinessLogic.Models
 {
-    // TODO: Change file location to BetService.DataAccess.Entities
+    // TODO: Change file location to BetService.BusinessLogic.Entities
     /// <summary>
     /// Bet business model representation.
     /// </summary>

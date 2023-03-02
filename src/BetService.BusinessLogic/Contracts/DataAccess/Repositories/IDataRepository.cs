@@ -1,6 +1,5 @@
 ﻿namespace BetService.BusinessLogic.Contracts.DataAccess.Repositories
 {
-    // TODO: change file location to BetService.DataAccess.Contracts.Repositories
     /// <summary>
     /// The data repository contract.
     /// </summary>
