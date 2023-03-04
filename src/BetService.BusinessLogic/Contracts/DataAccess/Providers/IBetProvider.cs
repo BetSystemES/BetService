@@ -41,5 +41,13 @@ namespace BetService.BusinessLogic.Contracts.DataAccess.Providers
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The list of <seealso cref="Bet"/>s with specific coefficientId.</returns>
         Task<IEnumerable<Bet>> GetRangeByCoefficientIds(IEnumerable<Guid> coefficientIds, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Gets the range.
+        /// </summary>
+        /// <param name="ids">The ids.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns> Range of bets with specific ids. </returns>
+        Task<IEnumerable<Bet>> GetRange(IEnumerable<Guid> ids, CancellationToken cancellationToken);
     }
 }

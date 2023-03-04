@@ -57,5 +57,13 @@ namespace BetService.DataAccess.Providers
                 .Where(x => coefficientIds.Contains(x.CoefficientId))
                 .ToArray());
         }
+
+        public Task<IEnumerable<Bet>> GetRange (IEnumerable<Guid> ids, CancellationToken cancellationToken)
+        {
+            return Task.FromResult((IEnumerable<Bet>)_entities
+                .AsNoTracking()
+                .Where(x => ids.Contains(x.Id))
+                .ToArray());
+        }
     }
 }

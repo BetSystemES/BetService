@@ -1,10 +1,8 @@
 ﻿using AutoMapper;
 using BetService.BusinessLogic.Contracts.Services;
 using BetService.BusinessLogic.Extensions;
-using BetService.BusinessLogic.Models;
 using BetService.Grpc.Infrastructure.Clients.CashService;
 using Grpc.Core;
-
 using BusinessModels = BetService.BusinessLogic.Models;
 
 namespace BetService.Grpc.Services
@@ -133,12 +131,13 @@ namespace BetService.Grpc.Services
 
             var betStatusUpdateModels = _mapper.Map<IEnumerable<BusinessModels.BetStatusUpdateModel>>(request.BetStatusUpdateModels);
 
-            await _betService.UpdateStatuses(betStatusUpdateModels, token);
+            var updatedBets = await _betService.UpdateStatuses(betStatusUpdateModels, token);
 
-            var positivebetStatusUpdateModels = betStatusUpdateModels.ToPositiveBets();
-            var positiveBets = await _betService.GetRangeByCoefficientIds(positivebetStatusUpdateModels.Select(x => x.CoefficientId), token);
-            await _cashService.DepositRange(positiveBets, token);
-            _logger.LogTrace("Payments were successfully compleated for bets, Counts={bets.Count} ", positiveBets.Count());
+            var positiveUnpaidBets = updatedBets.ToPositiveProcessingBets();
+
+            await _cashService.DepositRange(positiveUnpaidBets, token);
+
+            await _betService.CompletePayoutStatues(positiveUnpaidBets, token);
 
             var response = new UpdateBetStatusesResponse();
 

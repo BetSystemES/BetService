@@ -51,23 +51,5 @@ namespace BetService.DataAccess.Repositories
 
             return base.AddRange(entities, token);
         }
-
-        /// <summary>
-        /// Update bet status by coefficient identifier.
-        /// </summary>
-        /// <param name="coefficientId"></param>
-        /// <param name="betStatusType"></param>
-        /// <param name="cancellationToken"></param>
-        /// <returns>Task</returns>
-        public async Task UpdateBetStatusByCoefficientId(Guid coefficientId, BetStatusType betStatusType, CancellationToken cancellationToken)
-        {
-            var bet = await _entities.FirstOrDefaultAsync(x => x.CoefficientId.Equals(coefficientId), cancellationToken);
-
-            ArgumentNullException.ThrowIfNull(bet, nameof(bet));
-
-            bet.BetStatusType= betStatusType;
-
-            _entities.Update(bet);
-        }
     }
 }

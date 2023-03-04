@@ -22,13 +22,14 @@ namespace BetService.Grpc.Infrastructure.Clients.CashService
 
             foreach (var bet in bets)
             {
+                var betIncome = bet.Amount * bet.Rate;
                 var transactionModel = new TransactionModel
                 {
                     ProfileId = bet.UserId.ToString()
                 };
                 transactionModel.Transactions.Add(new Transaction()
                 {
-                    Amount = bet.Amount,
+                    Amount = betIncome,
                     CashType = CashType.Cash,
                     // TODO: delete generation of transactionId
                     TransactionId = Guid.NewGuid().ToString(),

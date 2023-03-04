@@ -26,12 +26,12 @@ namespace BetService.BusinessLogic.Contracts.Services
         Task<List<Bet>> GetRangeByUserId(Guid userId, int page, int pageSize, CancellationToken cancellationToken);
 
         /// <summary>
-        /// Updates the statuses.
+        /// Updates the statuses. For positive <seealso cref="Enums.BetStatusType"/> also modify payout status type for <seealso cref="Enums.BetPayoutStatus.Processing"/>.
         /// </summary>
         /// <param name="betStatusUpdateModels">The bet status update models.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns> Task </returns>
-        Task UpdateStatuses(IEnumerable<BetStatusUpdateModel> betStatusUpdateModels, CancellationToken cancellationToken);
+        /// <returns> The list olf updated bets. </returns>
+        Task<IEnumerable<Bet>> UpdateStatuses(IEnumerable<BetStatusUpdateModel> betStatusUpdateModels, CancellationToken cancellationToken);
 
         /// <summary>
         /// Creates the specified bet.
@@ -64,5 +64,13 @@ namespace BetService.BusinessLogic.Contracts.Services
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The list of <seealso cref="Bet"/>s with specific coefficientId.</returns>
         Task<IEnumerable<Bet>> GetRangeByCoefficientIds(IEnumerable<Guid> coefficientIds, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Completes the payout statues.
+        /// </summary>
+        /// <param name="entities">The entities.</param>
+        /// <param name="cancellationToken">The cancellation token.</param>
+        /// <returns>Task</returns>
+        Task CompletePayoutStatues(IEnumerable<Bet> entities, CancellationToken cancellationToken);
     }
 }
