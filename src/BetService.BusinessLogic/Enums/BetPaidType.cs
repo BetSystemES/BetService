@@ -1,9 +1,9 @@
 ﻿namespace BetService.BusinessLogic.Enums
 {
     /// <summary>
-    /// Bet paid type.
+    /// Bet payout status.
     /// </summary>
-    public enum BetPaidType
+    public enum BetPayoutStatus
     {
         /// <summary>
         /// The unspecified

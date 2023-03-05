@@ -39,5 +39,31 @@ namespace BetService.DataAccess.Providers
 
             return result;
         }
+
+        /// <inheritdoc />
+        public Task<IEnumerable<Bet>> GetRangeByCoefficientId(Guid coefficientId, CancellationToken cancellationToken)
+        {
+            return Task.FromResult((IEnumerable<Bet>)_entities
+                .AsNoTracking()
+                .Where(x => x.CoefficientId == coefficientId)
+                .ToArray());
+        }
+
+        /// <inheritdoc/>
+        public Task<IEnumerable<Bet>> GetRangeByCoefficientIds(IEnumerable<Guid> coefficientIds, CancellationToken cancellationToken)
+        {
+            return Task.FromResult((IEnumerable<Bet>)_entities
+                .AsNoTracking()
+                .Where(x => coefficientIds.Contains(x.CoefficientId))
+                .ToArray());
+        }
+
+        public Task<IEnumerable<Bet>> GetRange (IEnumerable<Guid> ids, CancellationToken cancellationToken)
+        {
+            return Task.FromResult((IEnumerable<Bet>)_entities
+                .AsNoTracking()
+                .Where(x => ids.Contains(x.Id))
+                .ToArray());
+        }
     }
 }

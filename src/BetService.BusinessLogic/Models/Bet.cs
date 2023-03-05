@@ -42,7 +42,7 @@ namespace BetService.BusinessLogic.Models
         /// <summary>
         /// Bet paid type.
         /// </summary>
-        public BetPaidType betPaidType { get; set; }
+        public BetPayoutStatus betPaidType { get; set; }
 
         /// <summary>
         /// Bet status type.

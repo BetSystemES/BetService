@@ -58,11 +58,11 @@ message GetUserBetByIdResponse {
   Bet bet = 1;
 }
 
-enum BetPaidType {
-  BET_PAID_TYPE_UNSPECIFIED = 0;
-  BET_PAID_TYPE_PROCESSING = 1;
-  BET_PAID_TYPE_PAID = 2;
-  BET_PAID_TYPE_BLOCKED = 3;
+enum BetPayoutStatus {
+  BET_PAYOUT_STATUS_UNSPECIFIED = 0;
+  BET_PAYOUT_STATUS_PROCESSING = 1;
+  BET_PAYOUT_STATUS_PAID = 2;
+  BET_PAYOUT_STATUS_BLOCKED = 3;
 }
 
 enum BetStatusType {
@@ -80,7 +80,7 @@ message Bet {
   double amount = 4;
   double rate = 5;
   BetStatusType status_type = 6;
-  BetPaidType paid_type = 7;
+  BetPayoutStatus paid_type = 7;
   .google.protobuf.Timestamp create_at_utc = 8; 
 }
 

@@ -1,5 +1,6 @@
 ﻿using BetService.DataAccess;
 using BetService.Grpc.Infrastructure.Configurations;
+using BetService.Grpc.Settings;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args)
@@ -7,6 +8,9 @@ var builder = WebApplication.CreateBuilder(args)
     .AddSerilogLogger();
 
 var configuration = builder.Configuration;
+
+builder.Services.Configure<ServiceEndpointsSettings>(
+    builder.Configuration.GetSection("ServiceEndpointsSettings"));
 
 builder.Services
     .AddProviders()
@@ -18,7 +22,10 @@ builder.Services
     })
     .AddInfrastructureServices()
     .AddBusinessLogicServices()
-    .AddGrpc();
+    .AddGrpcClientsServicesWrappers()
+    .AddGrpc()
+    .Services
+    .AddGrpcClients();
 
 var app = builder.Build();
 

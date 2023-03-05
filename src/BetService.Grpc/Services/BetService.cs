@@ -1,7 +1,8 @@
 ﻿using AutoMapper;
 using BetService.BusinessLogic.Contracts.Services;
+using BetService.BusinessLogic.Extensions;
+using BetService.Grpc.Infrastructure.Clients.CashService;
 using Grpc.Core;
-// TODO: remove all empty lines
 using BusinessModels = BetService.BusinessLogic.Models;
 
 namespace BetService.Grpc.Services
@@ -15,6 +16,7 @@ namespace BetService.Grpc.Services
         // TODO: logger was not used in the service. Use it or remove.
         private readonly ILogger<BetService> _logger;
         private readonly IBetService _betService;
+        private readonly ICashService _cashService;
         private readonly IMapper _mapper;
 
         /// <summary>
@@ -25,10 +27,12 @@ namespace BetService.Grpc.Services
         /// <param name="mapper">The mapper.</param>
         public BetService(ILogger<BetService> logger,
             IBetService betService,
+            ICashService cashService,
             IMapper mapper)
         {
             _logger = logger;
             _betService = betService;
+            _cashService = cashService;
             _mapper = mapper;
         }
 
@@ -126,9 +130,15 @@ namespace BetService.Grpc.Services
         {
             var token = context.CancellationToken;
 
-            var betStatusUpdateModels = _mapper.Map<List<BusinessModels.BetStatusUpdateModel>>(request.BetStatusUpdateModels);
+            var betStatusUpdateModels = _mapper.Map<IEnumerable<BusinessModels.BetStatusUpdateModel>>(request.BetStatusUpdateModels);
 
-            await _betService.UpdateStatuses(betStatusUpdateModels, token);
+            var updatedBets = await _betService.UpdateStatuses(betStatusUpdateModels, token);
+
+            var positiveUnpaidBets = updatedBets.ToPositiveProcessingBets();
+
+            await _cashService.DepositRange(positiveUnpaidBets, token);
+
+            await _betService.CompletePayoutStatues(positiveUnpaidBets, token);
 
             var response = new UpdateBetStatusesResponse();
 
