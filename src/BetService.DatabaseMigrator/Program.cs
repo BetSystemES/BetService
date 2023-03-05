@@ -1,9 +1,10 @@
-﻿using BetService.DataAccess;
+﻿using System.CommandLine;
+using BetService.DataAccess;
+using BetService.DataAccess.Extensions;
 using BetService.DatabaseMigrator.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using System.CommandLine;
 
 var rootCommand = new RootCommand("Migrate database by connection string via EntityFramework");
 var connectionStringSourceOption = new Option<string>("--connection-string-source",
@@ -51,7 +52,7 @@ static void Migrate<TContext>(Func<IServiceCollection, IServiceCollection> confi
 
 static void MigratePostgreSqlServer(string connectionString)
 {
-    Migrate<BetDbContext>(services =>   
+    Migrate<BetDbContext>(services =>
         services.AddPostgresContext(options =>
         {
             options.UseNpgsql(connectionString);

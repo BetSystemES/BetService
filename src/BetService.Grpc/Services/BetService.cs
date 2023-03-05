@@ -1,9 +1,8 @@
 ﻿using AutoMapper;
 using BetService.BusinessLogic.Contracts.Services;
-using BetService.BusinessLogic.Extensions;
 using BetService.Grpc.Infrastructure.Clients.CashService;
 using Grpc.Core;
-using BusinessModels = BetService.BusinessLogic.Models;
+using BusinessModels = BetService.BusinessLogic.Entities;
 
 namespace BetService.Grpc.Services
 {
@@ -13,8 +12,6 @@ namespace BetService.Grpc.Services
     /// <seealso cref="BetService.Grpc.BetService.BetServiceBase" />
     public class BetService : Grpc.BetService.BetServiceBase
     {
-        // TODO: logger was not used in the service. Use it or remove.
-        private readonly ILogger<BetService> _logger;
         private readonly IBetService _betService;
         private readonly ICashService _cashService;
         private readonly IMapper _mapper;
@@ -22,15 +19,12 @@ namespace BetService.Grpc.Services
         /// <summary>
         /// Initializes a new instance of the <see cref="BetService"/> class.
         /// </summary>
-        /// <param name="logger">The logger.</param>
         /// <param name="betService">The bet service.</param>
         /// <param name="mapper">The mapper.</param>
-        public BetService(ILogger<BetService> logger,
-            IBetService betService,
+        public BetService(IBetService betService,
             ICashService cashService,
             IMapper mapper)
         {
-            _logger = logger;
             _betService = betService;
             _cashService = cashService;
             _mapper = mapper;
@@ -132,13 +126,13 @@ namespace BetService.Grpc.Services
 
             var betStatusUpdateModels = _mapper.Map<IEnumerable<BusinessModels.BetStatusUpdateModel>>(request.BetStatusUpdateModels);
 
-            var updatedBets = await _betService.UpdateStatuses(betStatusUpdateModels, token);
+            await _betService.UpdateStatuses(betStatusUpdateModels, token);
 
-            var positiveUnpaidBets = updatedBets.ToPositiveProcessingBets();
+            var existingProcessingBets = await _betService.GetRangeProcessingBets(token);
 
-            await _cashService.DepositRange(positiveUnpaidBets, token);
+            await _cashService.DepositRange(existingProcessingBets, token);
 
-            await _betService.CompletePayoutStatues(positiveUnpaidBets, token);
+            await _betService.CompletePayoutStatues(existingProcessingBets, token);
 
             var response = new UpdateBetStatusesResponse();
 

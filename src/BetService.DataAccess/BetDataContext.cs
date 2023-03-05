@@ -1,11 +1,11 @@
-﻿using BetService.BusinessLogic.Contracts.DataAccess;
+﻿using BetService.DataAccess.Contracts;
 
 namespace BetService.DataAccess
 {
     /// <summary>
     /// Implementation of data context for bet databse.
     /// </summary>
-    /// <seealso cref="BetService.BusinessLogic.Contracts.DataAccess.IDataContext" />
+    /// <seealso cref="Contracts.IDataContext" />
     public class BetDataContext : IDataContext
     {
         private readonly BetDbContext _betDbContext;

@@ -4,7 +4,7 @@ using static CashService.GRPC.CashService;
 
 namespace BetService.Grpc.Infrastructure.Configurations
 {
-    public static partial class AppConfiguration
+    public static partial class AppConfigurations
     {
         public static IServiceCollection AddGrpcClients(this IServiceCollection services)
         {

@@ -1,4 +1,4 @@
-﻿using BusinessModels = BetService.BusinessLogic.Models;
+﻿using BusinessModels = BetService.BusinessLogic.Entities;
 
 namespace BetService.Grpc.Infrastructure.Clients.CashService
 {

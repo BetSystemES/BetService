@@ -1,5 +1,6 @@
 ﻿using BetService.BusinessLogic.Contracts.DataAccess.Providers;
-using BetService.BusinessLogic.Models;
+using BetService.BusinessLogic.Entities;
+using BetService.BusinessLogic.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace BetService.DataAccess.Providers
@@ -58,11 +59,11 @@ namespace BetService.DataAccess.Providers
                 .ToArray());
         }
 
-        public Task<IEnumerable<Bet>> GetRange (IEnumerable<Guid> ids, CancellationToken cancellationToken)
+        public Task<IEnumerable<Bet>> GetRangeProcessingBets(CancellationToken cancellationToken)
         {
             return Task.FromResult((IEnumerable<Bet>)_entities
                 .AsNoTracking()
-                .Where(x => ids.Contains(x.Id))
+                .Where(x => x.PayoutStatus == BetPayoutStatus.Processing)
                 .ToArray());
         }
     }

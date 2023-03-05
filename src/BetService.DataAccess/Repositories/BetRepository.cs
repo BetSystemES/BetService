@@ -1,6 +1,7 @@
 ﻿using BetService.BusinessLogic.Contracts.DataAccess.Repositories;
 using BetService.BusinessLogic.Contracts.Providers;
-using BetService.BusinessLogic.Models;
+using BetService.BusinessLogic.Entities;
+using BetService.BusinessLogic.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace BetService.DataAccess.Repositories
@@ -46,10 +47,32 @@ namespace BetService.DataAccess.Repositories
         public override Task AddRange(IEnumerable<Bet> entities, CancellationToken token)
         {
             var now = _dateTimeProvider.NowUtc;
-            // TODO: possible multiple enumerator for entities
-            entities.ToList().ForEach(x => x.CreateAtUtc = now);
+            Parallel.ForEach(entities, x => x.CreateAtUtc = now);
 
             return base.AddRange(entities, token);
+        }
+
+        /// <inheritdoc />
+        public Task UpdateBetStatuseByCoefficientIds(
+            IEnumerable<Guid> ids, BetStatusType status, CancellationToken token)
+        {
+            _entities.Where(x => ids.Contains(x.CoefficientId))
+                .ExecuteUpdate(e => e
+                .SetProperty(u => u.BetStatusType, u => status));
+
+            return Task.CompletedTask;
+        }
+
+        /// <inheritdoc />
+        public Task UpdateBetStatuseAndPayoutStatusByCoefficientIds(
+            IEnumerable<Guid> ids, BetStatusType status, BetPayoutStatus betPayoutStatus, CancellationToken token)
+        {
+            _entities.Where(x => ids.Contains(x.CoefficientId) && x.PayoutStatus != BetPayoutStatus.Paid)
+                .ExecuteUpdate(e => e
+                .SetProperty(u => u.BetStatusType, u => status)
+                .SetProperty(u => u.PayoutStatus, u => betPayoutStatus));
+
+            return Task.CompletedTask;
         }
     }
 }

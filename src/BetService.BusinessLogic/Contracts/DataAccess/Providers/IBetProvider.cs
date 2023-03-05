@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using BetService.BusinessLogic.Models;
+﻿using BetService.BusinessLogic.Entities;
 
 namespace BetService.BusinessLogic.Contracts.DataAccess.Providers
 {
@@ -43,11 +42,10 @@ namespace BetService.BusinessLogic.Contracts.DataAccess.Providers
         Task<IEnumerable<Bet>> GetRangeByCoefficientIds(IEnumerable<Guid> coefficientIds, CancellationToken cancellationToken);
 
         /// <summary>
-        /// Gets the range.
+        /// Get the range of bets with <seealso cref="Bet.PayoutStatus"/> equals to '<seealso cref="Enums.BetPayoutStatus.Processing"/>'.
         /// </summary>
-        /// <param name="ids">The ids.</param>
-        /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns> Range of bets with specific ids. </returns>
-        Task<IEnumerable<Bet>> GetRange(IEnumerable<Guid> ids, CancellationToken cancellationToken);
+        /// <param name="cancellationToken"></param>
+        /// <returns>The list of processing bets. </returns>
+        Task<IEnumerable<Bet>> GetRangeProcessingBets(CancellationToken cancellationToken);
     }
 }

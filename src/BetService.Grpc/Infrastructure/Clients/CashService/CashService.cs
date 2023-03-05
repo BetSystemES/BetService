@@ -1,7 +1,7 @@
 ﻿using CashService.GRPC;
 using Grpc.Net.ClientFactory;
 using static CashService.GRPC.CashService;
-using BusinessModels = BetService.BusinessLogic.Models;
+using BusinessModels = BetService.BusinessLogic.Entities;
 
 namespace BetService.Grpc.Infrastructure.Clients.CashService
 {

@@ -1,9 +1,10 @@
-﻿using BetService.BusinessLogic.Contracts.DataAccess;
-using BetService.BusinessLogic.Contracts.DataAccess.Providers;
+﻿using BetService.BusinessLogic.Contracts.DataAccess.Providers;
 using BetService.BusinessLogic.Contracts.DataAccess.Repositories;
 using BetService.BusinessLogic.Contracts.Services;
+using BetService.BusinessLogic.Entities;
 using BetService.BusinessLogic.Enums;
-using BetService.BusinessLogic.Models;
+using BetService.BusinessLogic.Extensions;
+using BetService.DataAccess.Contracts;
 using Microsoft.Extensions.Logging;
 
 namespace BetService.BusinessLogic.Services
@@ -39,7 +40,10 @@ namespace BetService.BusinessLogic.Services
         /// <inheritdoc/>
         public async Task CompletePayoutStatues(IEnumerable<Bet> entities, CancellationToken cancellationToken)
         {
-            entities.ToList().ForEach(x => x.betPaidType = BetPayoutStatus.Paid);
+            foreach (var entity in entities)
+            {
+                entity.PayoutStatus = BetPayoutStatus.Paid;
+            }
 
             await _betRepository.UpdateRange(entities, cancellationToken);
             await _dataContext.SaveChanges(cancellationToken);
@@ -88,31 +92,42 @@ namespace BetService.BusinessLogic.Services
         }
 
         /// <inheritdoc />
-        public async Task<IEnumerable<Bet>> UpdateStatuses(IEnumerable<BetStatusUpdateModel> betStatusUpdateModels, CancellationToken cancellationToken)
+        public Task<IEnumerable<Bet>> GetRangeProcessingBets(CancellationToken cancellationToken)
         {
-            var entities = await _betProvider.GetRangeByCoefficientIds(betStatusUpdateModels.Select(x => x.CoefficientId), cancellationToken);
+            return _betProvider.GetRangeProcessingBets(cancellationToken);
+        }
 
-            foreach (var betStatusUpdateModel in betStatusUpdateModels)
+        /// <inheritdoc />
+        public async Task UpdateStatuses(IEnumerable<BetStatusUpdateModel> betStatusUpdateModels, CancellationToken cancellationToken)
+        {
+            var tasks = new Task[]
             {
-                switch (betStatusUpdateModel.StatusType)
-                {
-                    case Enums.BetStatusType.Win:
-                        entities.Where(x => x.CoefficientId.Equals(betStatusUpdateModel.CoefficientId))
-                            .ToList()
-                            .ForEach(x => { x.BetStatusType = betStatusUpdateModel.StatusType; x.betPaidType = BetPayoutStatus.Processing; });
-                        break;
+                _betRepository.UpdateBetStatuseByCoefficientIds(
+                betStatusUpdateModels.WithBetStatusType(BetStatusType.Lose).Select(x => x.CoefficientId),
+                BetStatusType.Lose,
+                cancellationToken),
 
-                    case Enums.BetStatusType.Canceled:
-                        break;
-                }
-            }
+                _betRepository.UpdateBetStatuseByCoefficientIds(
+                betStatusUpdateModels.WithBetStatusType(BetStatusType.Blocked).Select(x => x.CoefficientId),
+                BetStatusType.Blocked,
+                cancellationToken),
 
-            await _betRepository.UpdateRange(entities, cancellationToken);
+                _betRepository.UpdateBetStatuseAndPayoutStatusByCoefficientIds(
+                betStatusUpdateModels.WithBetStatusType(BetStatusType.Win).Select(x => x.CoefficientId),
+                BetStatusType.Win,
+                BetPayoutStatus.Processing, cancellationToken),
+
+                _betRepository.UpdateBetStatuseAndPayoutStatusByCoefficientIds(
+                betStatusUpdateModels.WithBetStatusType(BetStatusType.Canceled).Select(x => x.CoefficientId),
+                BetStatusType.Canceled,
+                BetPayoutStatus.Processing, cancellationToken)
+            };
+
+            await Task.WhenAll(tasks);
+
             await _dataContext.SaveChanges(cancellationToken);
 
-            _logger.LogTrace("{BetStatusType} and {BetpayoutStatus} has been updated for bets, Counts={entities.Count} ", nameof(BetStatusType), nameof(BetPayoutStatus), entities.Count());
-
-            return entities;
+            _logger.LogTrace("{BetStatusType} and {BetpayoutStatus} has been updated for bets, Counts={entities.Count} ", nameof(BetStatusType), nameof(BetPayoutStatus), betStatusUpdateModels.Count());
         }
     }
 }

@@ -1,5 +1,5 @@
-﻿using BetService.BusinessLogic.Enums;
-using BetService.BusinessLogic.Models;
+﻿using BetService.BusinessLogic.Entities;
+using BetService.BusinessLogic.Enums;
 
 namespace BetService.BusinessLogic.Extensions
 {
@@ -15,7 +15,7 @@ namespace BetService.BusinessLogic.Extensions
         /// <returns>The list of positive unpaid bets.</returns>
         public static IEnumerable<Bet> ToPositiveProcessingBets(this IEnumerable<Bet> bets)
         {
-            return bets.Where(x => x.BetStatusType == BetStatusType.Win && x.betPaidType == BetPayoutStatus.Processing);
+            return bets.Where(x => x.BetStatusType == BetStatusType.Win && x.PayoutStatus == BetPayoutStatus.Processing);
         }
     }
 }

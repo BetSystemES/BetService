@@ -6,11 +6,10 @@ using ClientsWarapper = BetService.Grpc.Infrastructure.Clients;
 
 namespace BetService.Grpc.Infrastructure.Configurations
 {
-    // TODO: Remove partial or rename AppConfiguration to AppConfigurations
     /// <summary>
     /// App configuration
     /// </summary>
-    public static partial class AppConfiguration
+    public static partial class AppConfigurations
     {
         /// <summary>Adds the infrastructure services to service collection</summary>
         /// <param name="services">The service collection.</param>
@@ -28,7 +27,7 @@ namespace BetService.Grpc.Infrastructure.Configurations
         public static IServiceCollection AddBusinessLogicServices(this IServiceCollection services)
         {
             services.AddScoped<IBetService, BusinessLogic.Services.BetService>()
-                .AddScoped<IDateTimeProvider, BusinessLogic.DateTimeProvider>();
+                .AddScoped<IDateTimeProvider, BusinessLogic.Providers.DateTimeProvider>();
 
             return services;
         }

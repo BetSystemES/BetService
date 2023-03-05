@@ -1,4 +1,4 @@
-﻿using BetService.BusinessLogic.Models;
+﻿using BetService.BusinessLogic.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -22,7 +22,7 @@ namespace BetService.DataAccess.Configurations
             builder.Property(x => x.CoefficientId).IsRequired();
             builder.Property(x => x.Amount).IsRequired();
             builder.Property(x => x.Rate).IsRequired();
-            builder.Property(x => x.betPaidType).IsRequired();
+            builder.Property(x => x.PayoutStatus).IsRequired();
             builder.Property(x => x.BetStatusType).IsRequired();
             builder.Property(x => x.CreateAtUtc).IsRequired();
 

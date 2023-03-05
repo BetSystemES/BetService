@@ -1,12 +1,11 @@
 ﻿using BetService.BusinessLogic.Contracts.Providers;
 
-namespace BetService.BusinessLogic
+namespace BetService.BusinessLogic.Providers
 {
-    // TODO: should changed location of file to BetService.BusinessLogic.Providers
     /// <summary>
     /// Date time provider implementation
     /// </summary>
-    /// <seealso cref="IDateTimeProvider" />
+    /// <seealso cref="IDateTimeProvider"/>
     public class DateTimeProvider : IDateTimeProvider
     {
         /// <inheritdoc />

@@ -1,15 +1,14 @@
-﻿using BetService.BusinessLogic.Contracts.DataAccess;
-using BetService.BusinessLogic.Contracts.DataAccess.Providers;
+﻿using BetService.BusinessLogic.Contracts.DataAccess.Providers;
 using BetService.BusinessLogic.Contracts.DataAccess.Repositories;
-using BetService.BusinessLogic.Models;
+using BetService.BusinessLogic.Entities;
+using BetService.DataAccess.Contracts;
 using BetService.DataAccess.Providers;
 using BetService.DataAccess.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace BetService.DataAccess
+namespace BetService.DataAccess.Extensions
 {
-    // TODO: change file location to BetService.DataAccess.Extensions
     /// <summary>
     /// Data access services extenions for dependency injection.
     /// </summary>
@@ -51,7 +50,7 @@ namespace BetService.DataAccess
             services.AddDbContextPool<BetDbContext>(options);
 
             services.AddScoped<IDataContext, BetDataContext>();
-            services.AddTransient<DbContext>(serviceProvider => serviceProvider.GetRequiredService<BetDbContext>())
+            services.AddScoped<DbContext>(serviceProvider => serviceProvider.GetRequiredService<BetDbContext>())
                     .AddScopedDbSet<Bet>();
 
             return services;
@@ -66,7 +65,7 @@ namespace BetService.DataAccess
         private static IServiceCollection AddScopedDbSet<TEntity>(this IServiceCollection services)
             where TEntity : class
         {
-            services.AddScoped<DbSet<TEntity>>(serviceProvider =>
+            services.AddScoped(serviceProvider =>
                 serviceProvider.GetRequiredService<BetDbContext>().Set<TEntity>());
 
             return services;

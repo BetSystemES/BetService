@@ -1,4 +1,4 @@
-﻿using BetService.BusinessLogic.Models;
+﻿using BetService.BusinessLogic.Entities;
 
 namespace BetService.BusinessLogic.Contracts.Services
 {
@@ -31,7 +31,7 @@ namespace BetService.BusinessLogic.Contracts.Services
         /// <param name="betStatusUpdateModels">The bet status update models.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns> The list olf updated bets. </returns>
-        Task<IEnumerable<Bet>> UpdateStatuses(IEnumerable<BetStatusUpdateModel> betStatusUpdateModels, CancellationToken cancellationToken);
+        Task UpdateStatuses(IEnumerable<BetStatusUpdateModel> betStatusUpdateModels, CancellationToken cancellationToken);
 
         /// <summary>
         /// Creates the specified bet.
@@ -72,5 +72,12 @@ namespace BetService.BusinessLogic.Contracts.Services
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>Task</returns>
         Task CompletePayoutStatues(IEnumerable<Bet> entities, CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Get the range of bets with <seealso cref="Bet.PayoutStatus"/> equals to '<seealso cref="Enums.BetPayoutStatus.Processing"/>'.
+        /// </summary>
+        /// <param name="cancellationToken"></param>
+        /// <returns>The list of processing bets. </returns>
+        Task<IEnumerable<Bet>> GetRangeProcessingBets(CancellationToken cancellationToken);
     }
 }

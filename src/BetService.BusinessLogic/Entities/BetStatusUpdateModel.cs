@@ -1,6 +1,6 @@
 ﻿using BetService.BusinessLogic.Enums;
 
-namespace BetService.BusinessLogic.Models
+namespace BetService.BusinessLogic.Entities
 {
     /// <summary>
     /// Bet status update model.

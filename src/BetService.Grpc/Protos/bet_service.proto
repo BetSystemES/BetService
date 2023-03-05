@@ -80,7 +80,7 @@ message Bet {
   double amount = 4;
   double rate = 5;
   BetStatusType status_type = 6;
-  BetPayoutStatus paid_type = 7;
+  BetPayoutStatus payout_type = 7;
   .google.protobuf.Timestamp create_at_utc = 8; 
 }
 

@@ -1,8 +1,7 @@
 ﻿using BetService.BusinessLogic.Enums;
 
-namespace BetService.BusinessLogic.Models
+namespace BetService.BusinessLogic.Entities
 {
-    // TODO: Change file location to BetService.BusinessLogic.Entities
     /// <summary>
     /// Bet business model representation.
     /// </summary>
@@ -38,11 +37,10 @@ namespace BetService.BusinessLogic.Models
         /// </summary>
         public DateTime CreateAtUtc { get; set; }
 
-        // TODO: typo in betPaidType. Should be BetPaidType
         /// <summary>
         /// Bet paid type.
         /// </summary>
-        public BetPayoutStatus betPaidType { get; set; }
+        public BetPayoutStatus PayoutStatus { get; set; }
 
         /// <summary>
         /// Bet status type.
