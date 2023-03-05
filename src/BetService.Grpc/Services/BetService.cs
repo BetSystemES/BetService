@@ -13,6 +13,7 @@ namespace BetService.Grpc.Services
     /// <seealso cref="BetService.Grpc.BetService.BetServiceBase" />
     public class BetService : Grpc.BetService.BetServiceBase
     {
+        // TODO: logger was not used in the service. Use it or remove.
         private readonly ILogger<BetService> _logger;
         private readonly IBetService _betService;
         private readonly ICashService _cashService;

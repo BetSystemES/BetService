@@ -6,6 +6,7 @@ using ClientsWarapper = BetService.Grpc.Infrastructure.Clients;
 
 namespace BetService.Grpc.Infrastructure.Configurations
 {
+    // TODO: Remove partial or rename AppConfiguration to AppConfigurations
     /// <summary>
     /// App configuration
     /// </summary>

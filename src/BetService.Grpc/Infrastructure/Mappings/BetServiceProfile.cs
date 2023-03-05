@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Google.Protobuf.WellKnownTypes;
-
+// TODO: remove all empty lines
 using BusinessModels = BetService.BusinessLogic.Models;
 using BusinessEnums = BetService.BusinessLogic.Enums;
 
