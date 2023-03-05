@@ -1,6 +1,5 @@
 ﻿using BetService.BusinessLogic.Contracts.DataAccess.Repositories;
 using BetService.BusinessLogic.Contracts.Providers;
-using BetService.BusinessLogic.Enums;
 using BetService.BusinessLogic.Models;
 using Microsoft.EntityFrameworkCore;
 
@@ -19,7 +18,7 @@ namespace BetService.DataAccess.Repositories
         /// </summary>
         /// <param name="provider">The provider.</param>
         /// <param name="dateTimeProvider">The date time provider.</param>
-        public BetRepository(DbSet<Bet> provider, IDateTimeProvider dateTimeProvider) : base(provider, true)
+        public BetRepository(DbSet<Bet> provider, IDateTimeProvider dateTimeProvider) : base(provider)
         {
             _entities = provider;
             _dateTimeProvider = dateTimeProvider;

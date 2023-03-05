@@ -10,17 +10,13 @@ namespace BetService.DataAccess.Repositories
     {
         private readonly DbSet<TEntity> _entities;
 
-        private readonly bool _useHiLoGenerators;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="SqlRepository{TEntity}"/> class.
         /// </summary>
         /// <param name="entities">The entities.</param>
-        /// <param name="useHiLoGenerators">if set to <c>true</c> [use hi lo generators].</param>
-        protected SqlRepository(DbSet<TEntity> entities, bool useHiLoGenerators = false)
+        protected SqlRepository(DbSet<TEntity> entities)
         {
             _entities = entities;
-            _useHiLoGenerators = useHiLoGenerators;
         }
 
         /// <summary>
@@ -33,14 +29,7 @@ namespace BetService.DataAccess.Repositories
         {
             ArgumentNullException.ThrowIfNull(entity, "entity");
 
-            if (_useHiLoGenerators)
-            {
-                await _entities.AddAsync(entity, token);
-            }
-            else
-            {
-                _entities.Add(entity);
-            }
+            await _entities.AddAsync(entity, token);
         }
 
         /// <summary>
@@ -54,13 +43,8 @@ namespace BetService.DataAccess.Repositories
         {
             ArgumentNullException.ThrowIfNull(entities, "entities");
             var entities2 = entities as List<TEntity> ?? entities.ToList();
-            if (_useHiLoGenerators)
-            {
-                return _entities.AddRangeAsync(entities2, token);
-            }
 
-            _entities.AddRange(entities2);
-            return Task.CompletedTask;
+            return _entities.AddRangeAsync(entities2, token);
         }
 
         /// <summary>
