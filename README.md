@@ -10,9 +10,9 @@ Provides creation and update functionality.
 | ------------------- | -------------------------------- |
 | CreateBet()         | Creates the bet                  |
 | CreateBetRange()    | Creates the bet range.           |
-| UpdateBetStatuses() | Gets the user bet by identifier. |
+| UpdateBetStatuses() | Updates the bet statuses.        |
 | GetUsersBets()      | Gets the users bets.             |
-| GetUserBetById()    | Updates the bet statuses.        |
+| GetUserBetById()    | Gets the user bet by identifier. |
 
 <h2>Entity examples</h2>
 
@@ -26,7 +26,7 @@ Example of bet entity:
 | Amount         | double        |
 | Rate           | double        |
 | CreateAtUtc    | DateTime      |
-| betPaidType    | BetPaidType   |
+| PayoutStatus   | BetPaidType   |
 | BetStatusType  | BetStatusType |
 
 <h2>Requests examples</h2>
