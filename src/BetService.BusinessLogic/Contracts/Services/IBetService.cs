@@ -79,5 +79,12 @@ namespace BetService.BusinessLogic.Contracts.Services
         /// <param name="cancellationToken"></param>
         /// <returns>The list of processing bets. </returns>
         Task<IEnumerable<Bet>> GetRangeProcessingBets(CancellationToken cancellationToken);
+
+        /// <summary>
+        /// Get the range of bets with <seealso cref="Bet.PayoutStatus"/> equals to '<seealso cref="Enums.BetPayoutStatus.Processing"/>'.
+        /// </summary>
+        /// <param name="cancellationToken"></param>
+        /// <returns>The list of processing bets. </returns>
+        Task<IEnumerable<Bet>> HandleUpdateStatuses(IEnumerable<BetStatusUpdateModel> betStatusUpdateModels, CancellationToken token);
     }
 }

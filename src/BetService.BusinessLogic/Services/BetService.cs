@@ -129,5 +129,18 @@ namespace BetService.BusinessLogic.Services
 
             _logger.LogTrace("{BetStatusType} and {BetpayoutStatus} has been updated for bets, Counts={entities.Count} ", nameof(BetStatusType), nameof(BetPayoutStatus), betStatusUpdateModels.Count());
         }
+
+        /// <summary>
+        /// Update bet statuses and get collection of bets with processing status
+        /// </summary>
+        /// <param name="betStatusUpdateModels"></param>
+        /// <param name="token"></param>
+        /// <returns>IEnumerable<Bet></returns>
+        public async Task<IEnumerable<Bet>> HandleUpdateStatuses(IEnumerable<BetStatusUpdateModel> betStatusUpdateModels, CancellationToken token)
+        {
+            await UpdateStatuses(betStatusUpdateModels, token);
+            var existingProcessingBets = await GetRangeProcessingBets(token);
+            return existingProcessingBets;
+        }
     }
 }

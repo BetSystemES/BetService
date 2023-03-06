@@ -23,7 +23,6 @@ builder.Services
     })
     .AddInfrastructureServices()
     .AddBusinessLogicServices()
-    .AddGrpcClientsServicesWrappers()
     .AddGrpc()
     .Services
     .AddGrpcClients();

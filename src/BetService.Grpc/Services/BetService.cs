@@ -1,7 +1,9 @@
 ﻿using AutoMapper;
 using BetService.BusinessLogic.Contracts.Services;
-using BetService.Grpc.Infrastructure.Clients.CashService;
+using BetService.Grpc.Extensions;
+using CashService.GRPC;
 using Grpc.Core;
+using Grpc.Net.ClientFactory;
 using BusinessModels = BetService.BusinessLogic.Entities;
 
 namespace BetService.Grpc.Services
@@ -9,25 +11,28 @@ namespace BetService.Grpc.Services
     /// <summary>
     /// Implementation of bet grpc service.
     /// </summary>
-    /// <seealso cref="BetService.Grpc.BetService.BetServiceBase" />
+    /// <seealso cref="Grpc.BetService.BetServiceBase" />
     public class BetService : Grpc.BetService.BetServiceBase
     {
         private readonly IBetService _betService;
-        private readonly ICashService _cashService;
         private readonly IMapper _mapper;
+        private readonly GrpcClientFactory _grpcClientFactory;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BetService"/> class.
         /// </summary>
         /// <param name="betService">The bet service.</param>
         /// <param name="mapper">The mapper.</param>
-        public BetService(IBetService betService,
-            ICashService cashService,
-            IMapper mapper)
+        public BetService
+        (
+            IBetService betService,
+            IMapper mapper,
+            GrpcClientFactory grpcClientFactory
+        )
         {
             _betService = betService;
-            _cashService = cashService;
             _mapper = mapper;
+            _grpcClientFactory = grpcClientFactory;
         }
 
         /// <summary>
@@ -41,11 +46,9 @@ namespace BetService.Grpc.Services
             var token = context.CancellationToken;
 
             var bet = _mapper.Map<BusinessModels.Bet>(request.BetCreateModel);
-
             await _betService.Create(bet, token);
 
             var response = new CreateBetResponse();
-
             return response;
         }
 
@@ -60,11 +63,9 @@ namespace BetService.Grpc.Services
             var token = context.CancellationToken;
 
             var bets = _mapper.Map<List<BusinessModels.Bet>>(request.BetCreateModels);
-
             await _betService.CreateRange(bets, token);
 
             var response = new CreateBetRangeResponse();
-
             return response;
         }
 
@@ -81,14 +82,9 @@ namespace BetService.Grpc.Services
             var id = _mapper.Map<Guid>(request.Id);
 
             var bet = await _betService.GetById(id, token);
-
             var grpcBet = _mapper.Map<Bet>(bet);
 
-            var response = new GetUserBetByIdResponse()
-            {
-                Bet = grpcBet
-            };
-
+            var response = new GetUserBetByIdResponse() { Bet = grpcBet };
             return response;
         }
 
@@ -124,18 +120,17 @@ namespace BetService.Grpc.Services
         {
             var token = context.CancellationToken;
 
-            var betStatusUpdateModels = _mapper.Map<IEnumerable<BusinessModels.BetStatusUpdateModel>>(request.BetStatusUpdateModels);
+            var betStatusUpdateModels =
+                _mapper.Map<IEnumerable<BusinessModels.BetStatusUpdateModel>>(request.BetStatusUpdateModels);
+            var existingProcessingBets = await _betService.HandleUpdateStatuses(betStatusUpdateModels, token);
 
-            await _betService.UpdateStatuses(betStatusUpdateModels, token);
-
-            var existingProcessingBets = await _betService.GetRangeProcessingBets(token);
-
-            await _cashService.DepositRange(existingProcessingBets, token);
+            var client = _grpcClientFactory.GetGrpcClient<CashService.GRPC.CashService.CashServiceClient>();
+            var cacheRequest = _mapper.Map<DepositRangeRequest>(existingProcessingBets);
+            await client.DepositRangeAsync(cacheRequest);
 
             await _betService.CompletePayoutStatues(existingProcessingBets, token);
 
             var response = new UpdateBetStatusesResponse();
-
             return response;
         }
     }
