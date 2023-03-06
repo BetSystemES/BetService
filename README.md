@@ -1,6 +1,5 @@
 # BetService
 
-<h1>Competition Service</h1>
 Provides bet related data.
 Provides creation and update functionality.
 
