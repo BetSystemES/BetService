@@ -1,7 +1,6 @@
 ﻿using AutoMapper;
 using BetService.BusinessLogic.Contracts.Services;
 using BetService.Grpc.Extensions;
-using CashService.GRPC;
 using Grpc.Core;
 using Grpc.Net.ClientFactory;
 using BusinessModels = BetService.BusinessLogic.Entities;

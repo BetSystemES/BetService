@@ -31,40 +31,39 @@ namespace BetService.DataAccess.Providers
         }
 
         /// <inheritdoc />
-        public Task<List<Bet>> GetBetsRangeByUserId(Guid userId, int page, int pageSize, CancellationToken cancellationToken)
+        public async Task<IEnumerable<Bet>> GetBetsRangeByUserId(Guid userId, int page, int pageSize, CancellationToken cancellationToken)
         {
-            var result = _entities
+            return await _entities
+                .Where(x => x.UserId == userId)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync(cancellationToken);
-
-            return result;
         }
 
         /// <inheritdoc />
-        public Task<IEnumerable<Bet>> GetRangeByCoefficientId(Guid coefficientId, CancellationToken cancellationToken)
+        public async Task<IEnumerable<Bet>> GetRangeByCoefficientId(Guid coefficientId, CancellationToken cancellationToken)
         {
-            return Task.FromResult((IEnumerable<Bet>)_entities
+            return await _entities
                 .AsNoTracking()
                 .Where(x => x.CoefficientId == coefficientId)
-                .ToArray());
+                .ToListAsync(cancellationToken);
         }
 
         /// <inheritdoc/>
-        public Task<IEnumerable<Bet>> GetRangeByCoefficientIds(IEnumerable<Guid> coefficientIds, CancellationToken cancellationToken)
+        public async Task<IEnumerable<Bet>> GetRangeByCoefficientIds(IEnumerable<Guid> coefficientIds, CancellationToken cancellationToken)
         {
-            return Task.FromResult((IEnumerable<Bet>)_entities
+            return await _entities
                 .AsNoTracking()
                 .Where(x => coefficientIds.Contains(x.CoefficientId))
-                .ToArray());
+                .ToListAsync(cancellationToken);
         }
 
-        public Task<IEnumerable<Bet>> GetRangeProcessingBets(CancellationToken cancellationToken)
+        public async Task<IEnumerable<Bet>> GetRangeProcessingBets(CancellationToken cancellationToken)
         {
-            return Task.FromResult((IEnumerable<Bet>)_entities
+            return await _entities
                 .AsNoTracking()
                 .Where(x => x.PayoutStatus == BetPayoutStatus.Processing)
-                .ToArray());
+                .ToListAsync(cancellationToken);
         }
     }
 }

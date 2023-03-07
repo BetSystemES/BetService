@@ -22,15 +22,15 @@ namespace BetService.BusinessLogic.Contracts.Services
         /// <param name="page">The page.</param>
         /// <param name="pageSize">Size of the page.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>The list of bets.</returns>
-        Task<List<Bet>> GetRangeByUserId(Guid userId, int page, int pageSize, CancellationToken cancellationToken);
+        /// <returns>The range of bets.</returns>
+        Task<IEnumerable<Bet>> GetRangeByUserId(Guid userId, int page, int pageSize, CancellationToken cancellationToken);
 
         /// <summary>
         /// Updates the statuses. For positive <seealso cref="Enums.BetStatusType"/> also modify payout status type for <seealso cref="Enums.BetPayoutStatus.Processing"/>.
         /// </summary>
         /// <param name="betStatusUpdateModels">The bet status update models.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns> The list olf updated bets. </returns>
+        /// <returns>Task </returns>
         Task UpdateStatuses(IEnumerable<BetStatusUpdateModel> betStatusUpdateModels, CancellationToken cancellationToken);
 
         /// <summary>
@@ -54,7 +54,7 @@ namespace BetService.BusinessLogic.Contracts.Services
         /// </summary>
         /// <param name="coefficientId">The coefficient identifier.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>The list of <seealso cref="Bet"/>s with specific coefficientId.</returns>
+        /// <returns>The range of bets.<seealso cref="Bet"/>s with specific coefficientId.</returns>
         Task<IEnumerable<Bet>> GetRangeByCoefficientId(Guid coefficientId, CancellationToken cancellationToken);
 
         /// <summary>
@@ -62,7 +62,7 @@ namespace BetService.BusinessLogic.Contracts.Services
         /// </summary>
         /// <param name="coefficientIds">The coefficient identifiers.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
-        /// <returns>The list of <seealso cref="Bet"/>s with specific coefficientId.</returns>
+        /// <returns>The range of bets.<seealso cref="Bet"/>s with specific coefficientId.</returns>
         Task<IEnumerable<Bet>> GetRangeByCoefficientIds(IEnumerable<Guid> coefficientIds, CancellationToken cancellationToken);
 
         /// <summary>
@@ -77,7 +77,7 @@ namespace BetService.BusinessLogic.Contracts.Services
         /// Get the range of bets with <seealso cref="Bet.PayoutStatus"/> equals to '<seealso cref="Enums.BetPayoutStatus.Processing"/>'.
         /// </summary>
         /// <param name="cancellationToken"></param>
-        /// <returns>The list of processing bets. </returns>
+        /// <returns>The range of processing bets. </returns>
         Task<IEnumerable<Bet>> GetRangeProcessingBets(CancellationToken cancellationToken);
 
         /// <summary>
@@ -85,7 +85,7 @@ namespace BetService.BusinessLogic.Contracts.Services
         /// </summary>
         /// <param name="betStatusUpdateModels"></param>
         /// <param name="token"></param>
-        /// <returns>IEnumerable<Bet></returns>
+        /// <returns>The range of bets.<Bet></returns>
         Task<IEnumerable<Bet>> HandleUpdateStatuses(IEnumerable<BetStatusUpdateModel> betStatusUpdateModels, CancellationToken token);
     }
 }

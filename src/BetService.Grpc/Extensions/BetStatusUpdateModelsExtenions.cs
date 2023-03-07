@@ -1,6 +1,6 @@
 ﻿using CashService.GRPC;
-using BusinessModels = BetService.BusinessLogic.Entities;
 using BusinessEnums = BetService.BusinessLogic.Enums;
+using BusinessModels = BetService.BusinessLogic.Entities;
 
 namespace BetService.Grpc.Extensions
 {
