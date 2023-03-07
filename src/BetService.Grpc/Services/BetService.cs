@@ -23,6 +23,7 @@ namespace BetService.Grpc.Services
         /// </summary>
         /// <param name="betService">The bet service.</param>
         /// <param name="mapper">The mapper.</param>
+        /// <param name="grpcClientFactory">The GRPC client factory.</param>
         public BetService
         (
             IBetService betService,
@@ -125,8 +126,8 @@ namespace BetService.Grpc.Services
             var existingProcessingBets = await _betService.HandleUpdateStatuses(betStatusUpdateModels, token);
 
             var client = _grpcClientFactory.GetGrpcClient<CashService.GRPC.CashService.CashServiceClient>();
-            var cacheRequest = _mapper.Map<DepositRangeRequest>(existingProcessingBets);
-            await client.DepositRangeAsync(cacheRequest);
+            var cashRequest = existingProcessingBets.ToDepositRangeRequest();
+            await client.DepositRangeAsync(cashRequest);
 
             await _betService.CompletePayoutStatues(existingProcessingBets, token);
 

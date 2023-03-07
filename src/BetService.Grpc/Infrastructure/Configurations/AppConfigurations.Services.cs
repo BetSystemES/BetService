@@ -4,9 +4,6 @@ using BetService.Grpc.Infrastructure.Mappings;
 
 namespace BetService.Grpc.Infrastructure.Configurations
 {
-    /// <summary>
-    /// App configuration
-    /// </summary>
     public static partial class AppConfigurations
     {
         /// <summary>Adds the infrastructure services to service collection</summary>

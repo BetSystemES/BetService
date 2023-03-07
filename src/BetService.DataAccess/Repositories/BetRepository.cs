@@ -2,6 +2,7 @@
 using BetService.BusinessLogic.Contracts.Providers;
 using BetService.BusinessLogic.Entities;
 using BetService.BusinessLogic.Enums;
+using BetService.BusinessLogic.Helpers;
 using Microsoft.EntityFrameworkCore;
 
 namespace BetService.DataAccess.Repositories
@@ -56,7 +57,7 @@ namespace BetService.DataAccess.Repositories
         public Task UpdateBetStatuseByCoefficientIds(
             IEnumerable<Guid> ids, BetStatusType status, CancellationToken token)
         {
-            _entities.Where(x => ids.Contains(x.CoefficientId))
+            _entities.Where(BetQueryHelper.ContainsCoefficientIds(ids))
                 .ExecuteUpdate(e => e
                 .SetProperty(u => u.BetStatusType, u => status));
 
@@ -67,7 +68,7 @@ namespace BetService.DataAccess.Repositories
         public Task UpdateBetStatuseAndPayoutStatusByCoefficientIds(
             IEnumerable<Guid> ids, BetStatusType status, BetPayoutStatus betPayoutStatus, CancellationToken token)
         {
-            _entities.Where(x => ids.Contains(x.CoefficientId) && x.PayoutStatus != BetPayoutStatus.Paid)
+            _entities.Where(BetQueryHelper.ActiveAndContainsCoefficientids(ids))
                 .ExecuteUpdate(e => e
                 .SetProperty(u => u.BetStatusType, u => status)
                 .SetProperty(u => u.PayoutStatus, u => betPayoutStatus));

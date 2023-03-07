@@ -1,5 +1,4 @@
-﻿using BetService.DataAccess;
-using BetService.DataAccess.Extensions;
+﻿using BetService.DataAccess.Extensions;
 using BetService.Grpc.Infrastructure.Configurations;
 using BetService.Grpc.Settings;
 using Microsoft.EntityFrameworkCore;

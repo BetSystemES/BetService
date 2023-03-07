@@ -8,6 +8,9 @@
         public List<ServiceEndpoint> ServiceEndpoints { get; set; }
     }
 
+    /// <summary>
+    /// Service endpoint model.
+    /// </summary>
     public class ServiceEndpoint
     {
         public string? Name { get; set; }
