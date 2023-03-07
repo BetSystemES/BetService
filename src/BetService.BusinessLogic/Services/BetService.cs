@@ -86,7 +86,7 @@ namespace BetService.BusinessLogic.Services
         }
 
         /// <inheritdoc />
-        public Task<List<Bet>> GetRangeByUserId(Guid userId, int page, int pageSize, CancellationToken cancellationToken)
+        public Task<IEnumerable<Bet>> GetRangeByUserId(Guid userId, int page, int pageSize, CancellationToken cancellationToken)
         {
             return _betProvider.GetBetsRangeByUserId(userId, page, pageSize, cancellationToken);
         }

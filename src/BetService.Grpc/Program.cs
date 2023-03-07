@@ -34,5 +34,6 @@ app.Run();
 
 namespace BetService.Grpc
 {
-    public partial class Program { }
+    public partial class Program
+    { }
 }

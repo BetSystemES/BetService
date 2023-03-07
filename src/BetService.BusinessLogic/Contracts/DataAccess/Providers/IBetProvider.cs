@@ -23,7 +23,7 @@ namespace BetService.BusinessLogic.Contracts.DataAccess.Providers
         /// <param name="pageSize">Size of the page.</param>
         /// <param name="cancellationToken">The cancellation token.</param>
         /// <returns>The list of bets.</returns>
-        Task<List<Bet>> GetBetsRangeByUserId(Guid userId, int page, int pageSize, CancellationToken cancellationToken);
+        Task<IEnumerable<Bet>> GetBetsRangeByUserId(Guid userId, int page, int pageSize, CancellationToken cancellationToken);
 
         /// <summary>
         /// Gets the range by coefficient identifier.
