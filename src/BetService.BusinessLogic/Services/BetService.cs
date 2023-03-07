@@ -123,13 +123,17 @@ namespace BetService.BusinessLogic.Services
                 BetPayoutStatus.Processing, cancellationToken)
             };
 
+            var whenAllTask = Task.WhenAll(tasks);
             try
             {
-                await Task.WhenAll(tasks);
+                await whenAllTask;
             }
             catch (Exception)
             {
-                throw;
+                if (whenAllTask.Exception != null)
+                {
+                    throw whenAllTask.Exception;
+                }
             }
 
             await _dataContext.SaveChanges(cancellationToken);
