@@ -1,0 +1,50 @@
+﻿---
+version: "3"
+
+services:
+  betservice_db_postgres:
+    container_name: BetService_db_postgres
+    image: postgres:13.3
+    env_file: .env
+    ports:
+      - 5072:5432
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres -d BetDb" ]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
+    volumes:
+      - .\\volumes\\postgres-data\\:/var/lib/postgresql/data
+
+  betservice_postgres_migrator:
+    container_name: BetService_Postgres_Migrator
+    build:
+      context: ./../
+      dockerfile: ./src/BetService.DatabaseMigrator/Dockerfile
+    env_file: .env
+    command:
+       [
+        "dotnet",
+        "BetService.DatabaseMigrator.dll",
+        "--connection-string-source=env",
+        "--connection-string-env-variable-name=BetService_ConnectionStrings__BetDb"
+      ]
+    depends_on:
+      betservice_db_postgres:
+        condition: service_healthy
+
+  betservice_grpc_service:
+    container_name: BetService_GRPC_Service
+    build:
+      context: ./../
+      dockerfile: ./src/BetService.Grpc/Dockerfile
+    env_file: .env
+    ports:
+      - 5064:80
+    depends_on:
+      betservice_postgres_migrator:
+        condition: service_completed_successfully
+      betservice_db_postgres:
+        condition: service_healthy
