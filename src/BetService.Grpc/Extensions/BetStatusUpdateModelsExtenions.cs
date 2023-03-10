@@ -7,7 +7,7 @@ namespace BetService.Grpc.Extensions
     /// <summary>
     /// Extenions for <seealso cref="BusinessModels.Bet"/>
     /// </summary>
-    public static class BetExtenions
+    public static class BetExtensions
     {
         /// <summary>
         /// Converts to <seealso cref="DepositRangeRequest"/>.
