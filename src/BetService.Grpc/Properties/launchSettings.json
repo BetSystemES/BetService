@@ -1,13 +1,18 @@
-﻿{
-   "profiles": {
-      "BetService.Grpc": {
-         "commandName": "Project",
-         "dotnetRunMessages": true,
-         "launchBrowser": false,
-         "applicationUrl": "http://localhost:5181;https://localhost:7181",
-         "environmentVariables": {
-            "ASPNETCORE_ENVIRONMENT": "Development"
-         }
-      }
-   }
+{
+  "profiles": {
+    "BetService.Grpc": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "dotnetRunMessages": true,
+      "applicationUrl": "http://localhost:5181;https://localhost:7181"
+    },
+    "Docker": {
+      "commandName": "Docker",
+      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}",
+      "publishAllPorts": true,
+      "useSSL": true
+    }
+  }
 }
