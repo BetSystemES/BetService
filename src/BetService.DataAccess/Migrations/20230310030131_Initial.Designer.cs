@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BetService.DataAccess.Migrations
 {
     [DbContext(typeof(BetDbContext))]
-    [Migration("20230305225741_BetEntityUpdate")]
-    partial class BetEntityUpdate
+    [Migration("20230310030131_Initial")]
+    partial class Initial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
