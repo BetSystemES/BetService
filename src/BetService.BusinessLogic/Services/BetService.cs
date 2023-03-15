@@ -40,6 +40,7 @@ namespace BetService.BusinessLogic.Services
         /// <inheritdoc/>
         public async Task CompletePayoutStatues(IEnumerable<Bet> entities, CancellationToken cancellationToken)
         {
+            // TODO: review multiple enumeration
             foreach (var entity in entities)
             {
                 entity.PayoutStatus = BetPayoutStatus.Paid;
@@ -138,6 +139,7 @@ namespace BetService.BusinessLogic.Services
 
             await _dataContext.SaveChanges(cancellationToken);
 
+            // TODO: review multiple enumeration
             _logger.LogTrace("{BetStatusType} and {BetpayoutStatus} has been updated for bets, Counts={entities.Count} ", nameof(BetStatusType), nameof(BetPayoutStatus), betStatusUpdateModels.Count());
         }
 

@@ -125,6 +125,7 @@ namespace BetService.Grpc.Services
             var existingProcessingBets = await _betService.HandleUpdateStatuses(betStatusUpdateModels, token);
 
             var client = _grpcClientFactory.GetGrpcClient<CashService.GRPC.CashService.CashServiceClient>();
+            // TODO: review multiple enumeration
             var cashRequest = existingProcessingBets.ToDepositRangeRequest();
             await client.DepositRangeAsync(cashRequest);
 
