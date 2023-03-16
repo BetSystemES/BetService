@@ -120,6 +120,7 @@ namespace BetService.Grpc.Services
         {
             var token = context.CancellationToken;
 
+            // TODO: check what type is here
             var betStatusUpdateModels =
                 _mapper.Map<IEnumerable<BusinessModels.BetStatusUpdateModel>>(request.BetStatusUpdateModels);
             var existingProcessingBets = await _betService.HandleUpdateStatuses(betStatusUpdateModels, token);

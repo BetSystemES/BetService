@@ -18,6 +18,7 @@ namespace BetService.Grpc.Extensions
         {
             var request = new DepositRangeRequest();
 
+            // TODO: what happens under foreach
             foreach (var bet in bets)
             {
                 var transactionAmount = bet.BetStatusType switch
