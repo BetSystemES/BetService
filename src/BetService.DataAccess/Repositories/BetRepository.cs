@@ -54,7 +54,7 @@ namespace BetService.DataAccess.Repositories
         }
 
         /// <inheritdoc />
-        public Task UpdateBetStatuseByCoefficientIds(
+        public Task UpdateBetStatusesByCoefficientIds(
             IEnumerable<Guid> ids, BetStatusType status, CancellationToken token)
         {
             _entities.Where(BetQueryHelper.ContainsCoefficientIds(ids))
@@ -65,10 +65,29 @@ namespace BetService.DataAccess.Repositories
         }
 
         /// <inheritdoc />
-        public Task UpdateBetStatuseAndPayoutStatusByCoefficientIds(
+        public Task UpdateBetStatusesAndPayoutStatusByCoefficientIds(
             IEnumerable<Guid> ids, BetStatusType status, BetPayoutStatus betPayoutStatus, CancellationToken token)
         {
             _entities.Where(BetQueryHelper.ActiveAndContainsCoefficientids(ids))
+                .ExecuteUpdate(e => e
+                .SetProperty(u => u.BetStatusType, u => status)
+                .SetProperty(u => u.PayoutStatus, u => betPayoutStatus));
+
+            return Task.CompletedTask;
+        }
+
+        public Task UpdateBetStatusesByCoefficientId(Guid coefficientId, BetStatusType status, CancellationToken token)
+        {
+            _entities.Where(BetQueryHelper.ContainsCoefficientId(coefficientId))
+                .ExecuteUpdate(e => e
+                .SetProperty(u => u.BetStatusType, u => status));
+
+            return Task.CompletedTask;
+        }
+
+        public Task UpdateBetStatusesAndPayoutStatusByCoefficientId(Guid coefficientId, BetStatusType status, BetPayoutStatus betPayoutStatus, CancellationToken token)
+        {
+            _entities.Where(BetQueryHelper.ContainsCoefficientId(coefficientId))
                 .ExecuteUpdate(e => e
                 .SetProperty(u => u.BetStatusType, u => status)
                 .SetProperty(u => u.PayoutStatus, u => betPayoutStatus));

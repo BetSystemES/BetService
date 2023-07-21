@@ -103,22 +103,22 @@ namespace BetService.BusinessLogic.Services
         {
             var tasks = new Task[]
             {
-                _betRepository.UpdateBetStatuseByCoefficientIds(
+                _betRepository.UpdateBetStatusesByCoefficientIds(
                 betStatusUpdateModels.WithBetStatusType(BetStatusType.Lose).Select(x => x.CoefficientId),
                 BetStatusType.Lose,
                 cancellationToken),
 
-                _betRepository.UpdateBetStatuseByCoefficientIds(
+                _betRepository.UpdateBetStatusesByCoefficientIds(
                 betStatusUpdateModels.WithBetStatusType(BetStatusType.Blocked).Select(x => x.CoefficientId),
                 BetStatusType.Blocked,
                 cancellationToken),
 
-                _betRepository.UpdateBetStatuseAndPayoutStatusByCoefficientIds(
+                _betRepository.UpdateBetStatusesAndPayoutStatusByCoefficientIds(
                 betStatusUpdateModels.WithBetStatusType(BetStatusType.Win).Select(x => x.CoefficientId),
                 BetStatusType.Win,
                 BetPayoutStatus.Processing, cancellationToken),
 
-                _betRepository.UpdateBetStatuseAndPayoutStatusByCoefficientIds(
+                _betRepository.UpdateBetStatusesAndPayoutStatusByCoefficientIds(
                 betStatusUpdateModels.WithBetStatusType(BetStatusType.Canceled).Select(x => x.CoefficientId),
                 BetStatusType.Canceled,
                 BetPayoutStatus.Processing, cancellationToken)
@@ -147,6 +147,28 @@ namespace BetService.BusinessLogic.Services
         public async Task<IEnumerable<Bet>> HandleUpdateStatuses(IEnumerable<BetStatusUpdateModel> betStatusUpdateModels, CancellationToken token)
         {
             await UpdateStatuses(betStatusUpdateModels, token);
+            var existingProcessingBets = await GetRangeProcessingBets(token);
+            return existingProcessingBets;
+        }
+
+        public async Task<IEnumerable<Bet>> HandleUpdateStatus(BetStatusUpdateModel betStatusUpdateModel, CancellationToken token)
+        {
+            if (betStatusUpdateModel.StatusType.IsPayable())
+            {
+                await _betRepository.UpdateBetStatusesAndPayoutStatusByCoefficientId(
+                    betStatusUpdateModel.CoefficientId,
+                    betStatusUpdateModel.StatusType,
+                    BetPayoutStatus.Processing,
+                    token);
+            }
+            else
+            {
+                await _betRepository.UpdateBetStatusesByCoefficientId(
+                    betStatusUpdateModel.CoefficientId,
+                    betStatusUpdateModel.StatusType,
+                    token);
+            }
+
             var existingProcessingBets = await GetRangeProcessingBets(token);
             return existingProcessingBets;
         }

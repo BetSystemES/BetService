@@ -27,6 +27,16 @@ public static class BetQueryHelper
     }
 
     /// <summary>
+    /// Determines whether [contains coefficient id].
+    /// </summary>
+    /// <param name="id">The ids.</param>
+    /// <returns>The delegate that represents the lambda expression.</returns>
+    public static Expression<Func<Bet, bool>> ContainsCoefficientId(Guid id)
+    {
+        return x => x.CoefficientId == id;
+    }
+
+    /// <summary>
     /// Determines whether [contains coefficient ids] and [conatins active <seealso cref="BetStatusType"/>].
     /// </summary>
     /// <param name="ids">The ids.</param>

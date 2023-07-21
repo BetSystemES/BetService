@@ -1,5 +1,6 @@
 ﻿using BetService.DataAccess.Extensions;
 using BetService.Grpc.Infrastructure.Configurations;
+using BetService.Grpc.Infrastructure.Interceptors;
 using BetService.Grpc.Settings;
 using Microsoft.EntityFrameworkCore;
 
@@ -22,7 +23,11 @@ builder.Services
     })
     .AddInfrastructureServices()
     .AddBusinessLogicServices()
-    .AddGrpc()
+    .AddGrpc(options =>
+    {
+        options.Interceptors.Add<ErrorHandlingInterceptor>();
+        options.Interceptors.Add<ValidationInterceptor>();
+    })
     .Services
     .AddGrpcClients();
 

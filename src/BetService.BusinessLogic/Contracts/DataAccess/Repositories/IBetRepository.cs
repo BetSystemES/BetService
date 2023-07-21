@@ -8,10 +8,16 @@ namespace BetService.BusinessLogic.Contracts.DataAccess.Repositories
     /// </summary>
     public interface IBetRepository : IDataRepository<Bet>
     {
-        public Task UpdateBetStatuseByCoefficientIds(
+        public Task UpdateBetStatusesByCoefficientIds(
             IEnumerable<Guid> ids, BetStatusType status, CancellationToken token);
 
-        public Task UpdateBetStatuseAndPayoutStatusByCoefficientIds(
+        public Task UpdateBetStatusesAndPayoutStatusByCoefficientIds(
             IEnumerable<Guid> ids, BetStatusType status, BetPayoutStatus betPayoutStatus, CancellationToken token);
+
+        public Task UpdateBetStatusesByCoefficientId(
+            Guid id, BetStatusType status, CancellationToken token);
+
+        public Task UpdateBetStatusesAndPayoutStatusByCoefficientId(
+            Guid id, BetStatusType status, BetPayoutStatus betPayoutStatus, CancellationToken token);
     }
 }

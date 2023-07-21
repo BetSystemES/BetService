@@ -35,6 +35,7 @@ namespace BetService.DataAccess.Providers
         {
             return await _entities
                 .Where(x => x.UserId == userId)
+                .OrderByDescending(x => x.CreateAtUtc)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync(cancellationToken);

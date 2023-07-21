@@ -87,5 +87,7 @@ namespace BetService.BusinessLogic.Contracts.Services
         /// <param name="token"></param>
         /// <returns>The range of bets.<Bet></returns>
         Task<IEnumerable<Bet>> HandleUpdateStatuses(IEnumerable<BetStatusUpdateModel> betStatusUpdateModels, CancellationToken token);
+
+        Task<IEnumerable<Bet>> HandleUpdateStatus(BetStatusUpdateModel betStatusUpdateModel, CancellationToken token);
     }
 }

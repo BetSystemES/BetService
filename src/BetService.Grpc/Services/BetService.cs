@@ -1,8 +1,11 @@
 ﻿using AutoMapper;
 using BetService.BusinessLogic.Contracts.Services;
 using BetService.Grpc.Extensions;
+using BetService.Grpc.Models.CashService;
+using CashService.GRPC;
 using Grpc.Core;
 using Grpc.Net.ClientFactory;
+using Newtonsoft.Json.Linq;
 using BusinessModels = BetService.BusinessLogic.Entities;
 
 namespace BetService.Grpc.Services
@@ -16,6 +19,7 @@ namespace BetService.Grpc.Services
         private readonly IBetService _betService;
         private readonly IMapper _mapper;
         private readonly GrpcClientFactory _grpcClientFactory;
+        private readonly ILogger<BetService> _logger;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="BetService"/> class.
@@ -28,11 +32,13 @@ namespace BetService.Grpc.Services
             IBetService betService,
             IMapper mapper,
             GrpcClientFactory grpcClientFactory
-        )
+,
+            ILogger<BetService> logger)
         {
             _betService = betService;
             _mapper = mapper;
             _grpcClientFactory = grpcClientFactory;
+            _logger = logger;
         }
 
         /// <summary>
@@ -44,6 +50,34 @@ namespace BetService.Grpc.Services
         public override async Task<CreateBetResponse> CreateBet(CreateBetRequset request, ServerCallContext context)
         {
             var token = context.CancellationToken;
+            var client = _grpcClientFactory.GetGrpcClient<CashService.GRPC.CashService.CashServiceClient>();
+
+            try
+            {
+                var transactionModel = new TransactionModelCreateModel()
+                {
+                    Transactions = new List<TransactionCreateModel>()
+                    {
+                        new TransactionCreateModel()
+                        {
+                            Amount = request.BetCreateModel.Amount,
+                            CashType = Models.CashService.Enums.CashType.Cash
+                        }
+                    }
+                };
+                var grpcTransactionModel = _mapper.Map<TransactionRequestModel>(transactionModel);
+                grpcTransactionModel.ProfileId = request.BetCreateModel.UserId;
+            
+                var withdrawRequest = new WithdrawRequest
+                {
+                    Withdrawrequest = grpcTransactionModel
+                };
+                await client.WithdrawAsync(withdrawRequest);
+            }
+            catch (Exception)
+            {
+                throw;
+            }
 
             var bet = _mapper.Map<BusinessModels.Bet>(request.BetCreateModel);
             await _betService.Create(bet, token);
@@ -120,19 +154,36 @@ namespace BetService.Grpc.Services
         {
             var token = context.CancellationToken;
 
-            // TODO: check what type is here
             var betStatusUpdateModels =
                 _mapper.Map<IEnumerable<BusinessModels.BetStatusUpdateModel>>(request.BetStatusUpdateModels);
             var existingProcessingBets = await _betService.HandleUpdateStatuses(betStatusUpdateModels, token);
 
             var client = _grpcClientFactory.GetGrpcClient<CashService.GRPC.CashService.CashServiceClient>();
-            // TODO: review multiple enumeration
             var cashRequest = existingProcessingBets.ToDepositRangeRequest();
             await client.DepositRangeAsync(cashRequest);
 
             await _betService.CompletePayoutStatues(existingProcessingBets, token);
 
             var response = new UpdateBetStatusesResponse();
+            return response;
+        }
+
+        public override async Task<UpdateBetStatusResponse> UpdateBetStatus(UpdateBetStatusRequest request, ServerCallContext context)
+        {
+            var token = context.CancellationToken;
+            var betStatusUpdateModel =
+                _mapper.Map<BusinessModels.BetStatusUpdateModel>(request.BetStatusUpdateModel);
+            _logger.LogDebug($"!! betStatusUpdateModel: {betStatusUpdateModel.CoefficientId} {betStatusUpdateModel.StatusType}");
+            var existingProcessingBets = await _betService.HandleUpdateStatus(betStatusUpdateModel, token);
+            _logger.LogDebug($"!! existingProcessingBets length {existingProcessingBets.Count()}");
+            var client = _grpcClientFactory.GetGrpcClient<CashService.GRPC.CashService.CashServiceClient>();
+            var cashRequest = existingProcessingBets.ToDepositRangeRequest();
+            _logger.LogDebug($"!! cashRequest count {cashRequest.DepositRangeRequests.Count}");
+            await client.DepositRangeAsync(cashRequest);
+
+            await _betService.CompletePayoutStatues(existingProcessingBets, token);
+
+            var response = new UpdateBetStatusResponse();
             return response;
         }
     }

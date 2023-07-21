@@ -36,8 +36,6 @@ namespace BetService.Grpc.Extensions
                 {
                     Amount = transactionAmount,
                     CashType = CashType.Cash,
-                    // TODO: delete generation of transactionId
-                    TransactionId = Guid.NewGuid().ToString(),
                 });
 
                 request.DepositRangeRequests.Add(transactionModel);
